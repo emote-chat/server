@@ -14,18 +14,9 @@
 
 OS X, Linux and Windows:
 
-Server:
-
 ```sh
-cd server
+npm install
 npm start
-```
-
-Client:
-
-```sh
-cd client
-expo start
 ```
 
 <!-- ## Usage example -->

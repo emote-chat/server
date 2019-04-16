@@ -1,2 +1,5 @@
 **/node_modules/**/*
 **/npm-debug.*
+
+# OS-generated files #
+.DS_Store

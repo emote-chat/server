@@ -1,9 +1,26 @@
+const dotenv = require('dotenv').config({path: 'process.env'})
 const PORT = process.env.PORT || 5710;
 const NODE_ENV = process.env.NODE_ENV || 'development'; // 'production' if production
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const app = express();
+
+// pg-promise setup
+const promise = require('bluebird'); 
+const initOptions = {
+    promiseLib: promise // overriding the default (ES6 Promise)
+};
+const pgp = require('pg-promise')(initOptions);
+
+const cn = {
+    host: process.env.DB_HOST, // localhost is default
+    port: process.env.DB_PORT, // 5432 is default
+    database: process.env.DB_USER,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS
+};
+const db = pgp(cn); // database instance
 
 const signupRoute = require(path.join(__dirname, "routes/signup"));
 const loginRoute = require(path.join(__dirname, "routes/login"));
@@ -42,3 +59,13 @@ app.listen(app.get('port'), () => {
 	process.stdout.write(`Express started on ${isModeProduction ? 'http://emote.ml' : 'http://localhost'}:${app.get('port')}`);
 	process.stdout.write(`; ${isModeProduction ? '' : 'press Ctrl-C to terminate'}\n`);
 });
+
+// pg-promise test
+db.any('select * from messages')
+    .then(data => {
+        console.log('DATA:', data); // print data;
+    })
+    .catch(error => {
+        console.log('ERROR:', error); // print the error;
+    })
+.finally(db.$pool.end); // For immediate app exit, shutting down the connection pool

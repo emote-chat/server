@@ -12,11 +12,11 @@
 
 ## Database Setup for UNIX Based Systems
 
-1. Install [PostgreSQL >=10](https://www.postgresql.org/download/) on your given system
-2. Access the postgres prompt: [sudo -u postgres psql]
-3. Create a user (often the same as your UNIX account): [createuser --interactive]
-4. Create a database (often the same name as the user): [createdb username]
-5. Set a password for the user: [ALTER USER username PASSWORD 'password';]
+1. Install [PostgreSQL](https://www.postgresql.org/download/) >=10 on your given system
+2. Access the postgres prompt: `sudo -u postgres psql`
+3. Create a user (often the same as your UNIX account): `createuser --interactive`
+4. Create a database (often the same name as the user): `createdb username`
+5. Set a password for the user: `ALTER USER username PASSWORD 'password';`
 6. Exit the postgres prompt and create a file named '.env' in the root of the project, fill in these details:
 ```sh
 DB_HOST=localhost

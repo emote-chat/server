@@ -10,7 +10,22 @@
 <!-- update later with screenshot or gif of application -->
 ![header](https://user-images.githubusercontent.com/29691658/56085479-a48e0c00-5e09-11e9-9a68-08c8d5cf93d0.png)
 
-## Installation
+## Database Setup for UNIX Based Systems
+
+1. Install [PostgreSQL >=10](https://www.postgresql.org/download/) on your given system
+2. Access the postgres prompt: [sudo -u postgres psql]
+3. Create a user (often the same as your UNIX account): [createuser --interactive]
+4. Create a database (often the same name as the user): [createdb username]
+5. Set a password for the user: [ALTER USER username PASSWORD 'password';]
+6. Exit the postgres prompt and create a file named '.env' in the root of the project, fill in these details:
+```sh
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=username
+DB_PASS=password
+```
+
+## Application Installation
 
 OS X, Linux and Windows:
 

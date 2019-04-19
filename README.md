@@ -10,7 +10,26 @@
 <!-- update later with screenshot or gif of application -->
 ![header](https://user-images.githubusercontent.com/29691658/56085479-a48e0c00-5e09-11e9-9a68-08c8d5cf93d0.png)
 
-## Installation
+## Database Setup for UNIX Based Systems
+
+1. Install [PostgreSQL](https://www.postgresql.org/download/) >=10 on your given system
+2. Switch to the postgres UNIX account: `sudo -i -u postgres`
+3. Create a username and password (often the same as your UNIX account): `createuser myUsername --pwprompt`
+4. Create a database (often the same name as the username): `createdb myUsername`
+5. Exit the postgres UNIX account: `exit`
+6. Access the postgres prompt of the user and database you created: `psql -h localhost -d myDatabase -U myUsername`
+7. Import table initialization queries at the root of the project: `\i /pathtoproject/init_tables.sql`
+8. Import test data queries at the root of the project: `\i /pathtoproject/init_test_data.sql`
+9. Exit postgres prompt: `\q`
+10. Create a file named '.env' at the root of the project and fill in with postgres user details:
+```sh
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=myUsername
+DB_PASS=myPassword
+```
+
+## Application Installation
 
 OS X, Linux and Windows:
 

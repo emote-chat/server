@@ -71,7 +71,7 @@ npm test
 ## Meta
 
 * Sonam Kindy – [@sonamdkindy](https://github.com/sonamdkindy)
-* Eric Newtoner – [@ernewtoner](https://github.com/ernewtoner)
+* Eric Newton – [@ernewtoner](https://github.com/ernewtoner)
 * Michele Larson – [@mnicole](https://github.com/mnicole)
 
 Distributed under the GNU GPLv3 license. See the [LICENSE](LICENSE) file for more information.

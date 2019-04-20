@@ -10,26 +10,28 @@
 <!-- update later with screenshot or gif of application -->
 ![header](https://user-images.githubusercontent.com/29691658/56085479-a48e0c00-5e09-11e9-9a68-08c8d5cf93d0.png)
 
-## Database Setup for UNIX Based Systems
+## Local Database Setup for UNIX-based Systems
+<!-- remove next two steps later because we'll want to seed the database as part of running the server locally in 'development' mode -->
 
-1. Install [PostgreSQL](https://www.postgresql.org/download/) >=10 on your given system
-2. Switch to the postgres UNIX account: `sudo -i -u postgres`
-3. Create a username and password (often the same as your UNIX account): `createuser myUsername --pwprompt`
-4. Create a database (often the same name as the username): `createdb myUsername`
-5. Exit the postgres UNIX account: `exit`
-6. Access the postgres prompt of the user and database you created: `psql -h localhost -d myDatabase -U myUsername`
-7. Import table initialization queries at the root of the project: `\i /pathtoproject/init_tables.sql`
-8. Import test data queries at the root of the project: `\i /pathtoproject/init_test_data.sql`
-9. Exit postgres prompt: `\q`
-10. Create a file named '.env' at the root of the project and fill in with postgres user details:
+1. Install [PostgreSQL](https://www.postgresql.org/download/) **major version 11** 
+1. Switch to the postgres UNIX account: `sudo -i -u postgres`
+1. Create a username and password (replace `username` with desired username): `createuser username --pwprompt`
+1. Enter password to be used for the user you just created
+1. Create a database (replace `database` with desired database name): `createdb database`
+1. Exit the postgres UNIX account: `exit`
+1. Access the postgres prompt of the user and database you created (replace `database` and `username` with that which you just created): `psql -h localhost -d database -U username`
+1. Import table initialization queries at the root of the project: `\i /pathtoproject/init_tables.sql`
+1. Import test data queries at the root of the project: `\i /pathtoproject/init_test_data.sql`
+1. Exit postgres prompt: `\q`
+1. Create a file named `.env` at the root of the project and with the following information (replace `username` with your username and `password` with the username password):
 ```sh
 DB_HOST=localhost
 DB_PORT=5432
-DB_USER=myUsername
-DB_PASS=myPassword
+DB_USER=username
+DB_PASS=password
 ```
 
-## Application Installation
+## Locally Run Server
 
 OS X, Linux and Windows:
 

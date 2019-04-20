@@ -16,7 +16,7 @@
 2. Switch to the postgres UNIX account: `sudo -i -u postgres`
 3. Create a username and password (often the same as your UNIX account): `createuser myUsername --pwprompt`
 4. Create a database (often the same name as the username): `createdb myUsername`
-5. Exit the postgres UNIX account: `exit`.
+5. Exit the postgres UNIX account: `exit`
 6. Access the postgres prompt of the user and database you created: `psql -d myDatabase -U myUsername`
 7. Import table initialization queries at the root of the project: `\i /pathtoproject/init_tables.sql`
 8. Import test data queries at the root of the project: `\i /pathtoproject/init_test_data.sql`

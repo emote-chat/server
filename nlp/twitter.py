@@ -42,7 +42,7 @@ def twitterAuth():
 
 '''
 PART 2: GETTING CREDENTIALS
-- Enter keys from PART 1 below (OAUTH_VERIFIER comes from the redirect URL hash)
+Enter keys from PART 1 below (OAUTH_VERIFIER comes from the redirect URL hash)
 '''
 def twitterCred():
     OAUTH_TOKEN = ''
@@ -52,12 +52,8 @@ def twitterCred():
     twitter = Twython(TWITTER_KEY, TWITTER_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
     final_step = twitter.get_authorized_tokens(OAUTH_VERIFIER)
 
-    OAUTH_TOKEN = final_step['oauth_token']
-    OAUTH_TOKEN_SECRET = final_step['oauth_token_secret']
-    print(OAUTH_TOKEN)
-    print(OAUTH_TOKEN_SECRET)
-
-    # Store OAUTH_TOKEN and OAUTH_TOKEN_SCRIPT in your .bash_profile and restart terminal
+    os.environ['OAUTH_TOKEN'] = final_step['oauth_token']
+    os.environ['OAUTH_TOKEN_SECRET'] = final_step['oauth_token_secret']
 
 '''
 PART 3: USE CREDENTIALS TO OPEN STREAM
@@ -114,7 +110,7 @@ def cleanTweet(tweet):
         regex = r'\#\S+|\@\S+|\\U\w+'
         tweet = re.sub(regex, '', tweet, flags=re.MULTILINE).strip()
 
-        # Store in format emoji + tweet
+        # Store in format emoji + @ + tweet
         # Remove duplicates, and write one row per emoji if multiple emojis
         for emoji in set(emojis):
             outputFile.write(emoji + ' @ ' + tweet + '\n')

@@ -2,7 +2,8 @@
 > A mobile chat application with emoji reactions and NLP-generated emoji suggestions.
 
 [![NPM Version][npm-image]][npm-url]
-<!-- [![Build Status][travis-image]][travis-url]
+[![CircleCI](https://circleci.com/gh/emote-chat/server.svg?style=svg)](https://circleci.com/gh/emote-chat/server)
+<!-- 
 [![Downloads Stats][npm-downloads]][npm-url] -->
 
 <!-- One to two paragraph statement about your product and what it does. -->

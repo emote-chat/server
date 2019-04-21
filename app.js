@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 const dotenv = require('dotenv').config();
+=======
+const dotenv = require('dotenv').config()
+>>>>>>> 3bdf256317559effc0cb746c3d6371373b2c905b
 const PORT = process.env.PORT || 5710;
 const NODE_ENV = process.env.NODE_ENV || 'development'; // 'production' if production
 const express = require('express');

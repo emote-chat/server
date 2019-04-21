@@ -2,7 +2,8 @@
 > A mobile chat application with emoji reactions and NLP-generated emoji suggestions.
 
 [![NPM Version][npm-image]][npm-url]
-<!-- [![Build Status][travis-image]][travis-url]
+[![CircleCI](https://circleci.com/gh/emote-chat/server.svg?style=svg)](https://circleci.com/gh/emote-chat/server)
+<!-- 
 [![Downloads Stats][npm-downloads]][npm-url] -->
 
 <!-- One to two paragraph statement about your product and what it does. -->
@@ -10,7 +11,28 @@
 <!-- update later with screenshot or gif of application -->
 ![header](https://user-images.githubusercontent.com/29691658/56085479-a48e0c00-5e09-11e9-9a68-08c8d5cf93d0.png)
 
-## Installation
+## Local Database Setup for UNIX-based Systems
+<!-- remove next two steps later because we'll want to seed the database as part of running the server locally in 'development' mode -->
+
+1. Install [PostgreSQL](https://www.postgresql.org/download/) **major version 11** 
+1. Switch to the postgres UNIX account: `sudo -i -u postgres`
+1. Create a username and password (replace `username` with desired username): `createuser username --pwprompt`
+1. Enter password to be used for the user you just created
+1. Create a database (replace `database` with desired database name): `createdb database`
+1. Exit the postgres UNIX account: `exit`
+1. Access the postgres prompt of the user and database you created (replace `database` and `username` with that which you just created): `psql -h localhost -d database -U username`
+1. Import table initialization queries at the root of the project: `\i /pathtoproject/init_tables.sql`
+1. Import test data queries at the root of the project: `\i /pathtoproject/init_test_data.sql`
+1. Exit postgres prompt: `\q`
+1. Create a file named `.env` at the root of the project and with the following information (replace `username` with your username and `password` with the username password):
+```sh
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=username
+DB_PASS=password
+```
+
+## Locally Run Server
 
 OS X, Linux and Windows:
 
@@ -52,10 +74,10 @@ npm test
 ## Meta
 
 * Sonam Kindy – [@sonamdkindy](https://github.com/sonamdkindy)
-* Eric Newtoner – [@ernewtoner](https://github.com/ernewtoner)
+* Eric Newton – [@ernewtoner](https://github.com/ernewtoner)
 * Michele Larson – [@mnicole](https://github.com/mnicole)
 
-Distributed under the GNU GPLv3 license. See the [LICENSE](LICENSE) file for more information.
+Distributed under the Apache v2.0 license. See the [LICENSE](LICENSE) file for more information.
 
 ## Contributing
 

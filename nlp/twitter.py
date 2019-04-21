@@ -26,15 +26,10 @@ class MyStreamer(TwythonStreamer):
         self.disconnect()
 
 '''
-Use this function to connect to Twitter Stream API.
+PART 1: AUTHENTICATING
+Run the script, go to the auth url and verify.
 '''
-def connectTwitterStream():
-    '''
-    When first authenticating:
-    - Run the script, go to the auth url and verify.
-    - Add OAUTH_TOKEN, OAUTH_TOKEN_SECRET, OAUTH_VERIFIER (from redirect url after you authenticate) to the script.
-    - Comment out this section/comment in the rest, and re-run the script.
-    '''
+def twitterAuth():
     twitter = Twython(TWITTER_KEY, TWITTER_SECRET)
     auth = twitter.get_authentication_tokens()
 
@@ -45,24 +40,44 @@ def connectTwitterStream():
     print(OAUTH_TOKEN_SECRET)
     print(auth['auth_url'])
 
+'''
+PART 2: GETTING CREDENTIALS
+- Enter keys from PART 1 below (OAUTH_VERIFIER comes from the redirect URL hash)
+'''
+def twitterCred():
     OAUTH_TOKEN = ''
     OAUTH_TOKEN_SECRET = ''
     OAUTH_VERIFIER = ''
 
-    '''
-    Comment this section in when you have the keys entered
-    '''
-    # twitter = Twython(TWITTER_KEY, TWITTER_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
-    # final_step = twitter.get_authorized_tokens(OAUTH_VERIFIER)
+    twitter = Twython(TWITTER_KEY, TWITTER_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
+    final_step = twitter.get_authorized_tokens(OAUTH_VERIFIER)
 
-    # OAUTH_TOKEN = final_step['oauth_token']
-    # OAUTH_TOKEN_SECRET = final_step['oauth_token_secret']
+    OAUTH_TOKEN = final_step['oauth_token']
+    OAUTH_TOKEN_SECRET = final_step['oauth_token_secret']
+    print(OAUTH_TOKEN)
+    print(OAUTH_TOKEN_SECRET)
 
-    # I think we can only open one stream at a time
-    # QUERY = '&'.join(EMOJIS[0])
+    # Store OAUTH_TOKEN and OAUTH_TOKEN_SCRIPT in your .bash_profile and restart terminal
 
-    # stream = MyStreamer(TWITTER_KEY, TWITTER_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
-    # stream.statuses.filter(track=QUERY, language='en')
+'''
+PART 3: USE CREDENTIALS TO OPEN STREAM
+'''
+def openStream():
+    OAUTH_TOKEN = os.environ.get('OAUTH_TOKEN')
+    OAUTH_TOKEN_SECRET = os.environ.get('OAUTH_TOKEN_SECRET')
+    QUERY = '&'.join(EMOJIS[0]) # I think we can only open one stream at a time
+
+    stream = MyStreamer(TWITTER_KEY, TWITTER_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
+    stream.statuses.filter(track=QUERY, language='en')
+
+'''
+Use this function to connect to Twitter Stream API.
+'''
+def connectTwitterStream():
+    # When first authenticating, comment in these steps one at a time
+    # twitterAuth()
+    # twitterCred()
+    openStream()
 
 '''
 Use this function to connect to Twitter Search API.

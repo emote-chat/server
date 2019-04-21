@@ -1,10 +1,9 @@
 # Emote
 > A mobile chat application with emoji reactions and NLP-generated emoji suggestions.
 
-[![NPM Version][npm-image]][npm-url]
 [![CircleCI](https://circleci.com/gh/emote-chat/server.svg?style=svg)](https://circleci.com/gh/emote-chat/server)
-<!-- 
-[![Downloads Stats][npm-downloads]][npm-url] -->
+<!-- [![NPM Version][npm-image]][npm-url] -->
+<!-- [![Downloads Stats][npm-downloads]][npm-url] -->
 
 <!-- One to two paragraph statement about your product and what it does. -->
 
@@ -39,6 +38,15 @@ OS X, Linux and Windows:
 ```sh
 npm install
 npm start
+```
+
+### NLP Installation
+
+Make sure to add the `TWITTER_KEY` and `TWITTER_SECRET` as environment variables.
+
+```
+conda env update -f env.yml --prune
+conda activate emote
 ```
 
 <!-- ## Usage example -->
@@ -92,9 +100,9 @@ Distributed under the Apache v2.0 license. See the [LICENSE](LICENSE) file for m
 <!-- list other critical resources used -->
 
 <!-- Markdown link & img dfn's -->
-[npm-image]: https://img.shields.io/npm/v/datadog-metrics.svg?style=flat-square
+<!-- [npm-image]: https://img.shields.io/npm/v/datadog-metrics.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/datadog-metrics
 [npm-downloads]: https://img.shields.io/npm/dm/datadog-metrics.svg?style=flat-square
 [travis-image]: https://img.shields.io/travis/dbader/node-datadog-metrics/master.svg?style=flat-square
 [travis-url]: https://travis-ci.org/dbader/node-datadog-metrics
-[wiki]: https://github.com/yourname/yourproject/wiki
+[wiki]: https://github.com/yourname/yourproject/wiki -->

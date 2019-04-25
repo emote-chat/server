@@ -33,9 +33,5 @@
     "fs": "0.0.1-security",
     "jest": "^24.7.1",
     "supertest": "^4.0.2"
-  },
-  "apidoc": {
-    "title": "Emote - API Documentation",
-    "url": "http://emote.ml"
   }
 }

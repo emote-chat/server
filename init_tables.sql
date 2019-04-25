@@ -10,8 +10,8 @@ CASCADE;
 -- create users table (note: 'user' is a reserved keyword in postgres)
 CREATE TABLE users (
     id serial PRIMARY KEY,
-    email varchar(254) NOT NULL,
-    password varchar(30) NOT NULL,
+    email varchar(254) NOT NULL UNIQUE,
+    password varchar(60) NOT NULL,
     display_name varchar(35) NOT NULL,
     first_name varchar(35),
     last_name varchar(35)

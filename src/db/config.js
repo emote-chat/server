@@ -1,6 +1,6 @@
 module.exports = (() => {
     require('dotenv').config();
-    const NODE_ENV = process.env.NODE_ENV || 'development'; // 'production' if production
+    const env = process.env.NODE_ENV || 'development'; // 'production' if production
 
     var config = {
         development: {
@@ -32,7 +32,7 @@ module.exports = (() => {
     });
 
     // return db instance
-    return pgp(config[NODE_ENV]);
+    return pgp(config[env]);
 })();
 
 

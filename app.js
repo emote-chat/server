@@ -1,71 +1,49 @@
-const dotenv = require('dotenv').config();
-const PORT = process.env.PORT || 5710;
-const NODE_ENV = process.env.NODE_ENV || 'development'; // 'production' if production
+// load environment vars from .env file
+require('dotenv').config(); 
+
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const app = express();
+const jwt = require('express-jwt');
 
-// pg-promise setup
-const promise = require('bluebird'); 
-const initOptions = {
-    promiseLib: promise // overriding the default (ES6 Promise)
-};
-const pgp = require('pg-promise')(initOptions);
+// bring in route defs
+const signupRouter = require(path.join(__dirname, 'routes/signup'));
+const loginRouter = require(path.join(__dirname, 'routes/login'));
+const usersRouter = require(path.join(__dirname, 'routes/users')); 
+const chatsRouter = require(path.join(__dirname, 'routes/chats'));
+const messagesRouter = require(path.join(__dirname, 'routes/messages'));
 
-const cn = {
-    host: process.env.DB_HOST, // localhost is default
-    port: process.env.DB_PORT, // 5432 is default
-    database: process.env.DB_USER,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS
-};
-const db = pgp(cn); // database instance
+// global error handler
+const errorHandler = require(path.join(__dirname, 'helpers/errorHandler'));
 
-const signupRoute = require(path.join(__dirname, "routes/signup"));
-const loginRoute = require(path.join(__dirname, "routes/login"));
-const usersRoute = require(path.join(__dirname, "routes/users")); 
-const chatsRoute = require(path.join(__dirname, "routes/chats"));
-const messagesRoute = require(path.join(__dirname, "routes/messages"));
+// set app port and mode; default to dev't and 5710 respectively
+app.set('port', process.env.PORT || 5710);
+app.set('mode', process.env.NODE_ENV || 'development');
 
-app.set('port', PORT);
-app.set('mode', NODE_ENV);
-
+// make sure we can properly parse the req.body
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use('/signup', signupRoute);
-app.use('/login', loginRoute);
-app.use('/user', usersRoute);
-app.use('/chat', chatsRoute);
-app.use('/message', messagesRoute);
+// serve API documentation generated via apidoc at /
+app.use(express.static(path.join(__dirname, "public")));
 
-// we don't really need this endpoint
-// just added reassurance that server is up and running if you want it
-app.get('/', (req, res) => {
-	res.send("Good to go");
-});
+// middleware for verifying token for protected routes
+const unprotectedRoutes = ['/login', '/signup', '/'];
+app.use(jwt({
+    secret: process.env.SECRET,
+    credentialsRequired: true
+}).unless({ path: unprotectedRoutes }));
 
-app.use((req,res) => {
-	res.status(404).send("What you're trying to access doesn't exist");
-});
+// set app to use the given paths for the given route defs
+app.use('/signup', signupRouter);
+app.use('/login', loginRouter);
+app.use('/user', usersRouter);
+app.use('/chat', chatsRouter);
+app.use('/message', messagesRouter);
 
-app.use((err, req, res, next) => {
-	res.status(500).send(err.stack);
-});
+// global error handler
+app.use(errorHandler);
 
-app.listen(app.get('port'), () => {
-	const isModeProduction = app.get('mode') === 'production';
-	process.stdout.write(`Express started on ${isModeProduction ? 'http://emote.ml' : 'http://localhost'}:${app.get('port')}`);
-	process.stdout.write(`; ${isModeProduction ? '' : 'press Ctrl-C to terminate'}\n`);
-});
-
-// pg-promise test
-db.any('select * from messages')
-    .then(data => {
-        console.log('DATA:', data); // print data;
-    })
-    .catch(error => {
-        console.log('ERROR:', error); // print the error;
-    })
-.finally(db.$pool.end); // For immediate app exit, shutting down the connection pool
+// export app to be included for tests and running of server
+module.exports = app;

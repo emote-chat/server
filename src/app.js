@@ -26,7 +26,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // serve API documentation generated via apidoc at /
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "../public")));
 
 // middleware for verifying token for protected routes
 const unprotectedRoutes = ['/login', '/signup', '/'];

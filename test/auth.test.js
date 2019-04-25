@@ -1,5 +1,6 @@
+const path = require('path');
 const request = require('supertest');
-const app = require('../app');
+const app = require(path.join(__dirname, '../src/app'));
 const fs = require('fs');
 
 // hard-coded user for testing
@@ -9,9 +10,11 @@ const user = {
     password: 'test123'
 }
 
-// drop and recreate tables
-const reloadTables = async (db) => {
-    const sql = fs.readFileSync('init_tables.sql').toString();
+// init db; drop and recreate tables
+const initDb = async (db) => {
+    const sql = fs.readFileSync(
+        path.join(__dirname, '../src/db/init_db.sql')
+    ).toString();
     await db.multi(sql);
 }
 
@@ -20,8 +23,8 @@ describe('Test Suite for auth', () => {
     let db = null;
     beforeAll(async (done) => {
         server = await app.listen();
-        db = require('../db/config');
-        await reloadTables(db);
+        db = require(path.join(__dirname, '../src/db/config'));
+        await initDb(db);
         done();
     })
     afterAll(async (done) => {

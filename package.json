@@ -4,9 +4,9 @@
   "description": "Server-side for Emote mobile chat application",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "node src/server.js",
     "test": "jest --verbose --runInBand --detectOpenHandles",
-    "apidoc": "apidoc -i routes/ -f signup.js -e public/ -o public/"
+    "apidoc": "apidoc -i src/routes/ -f signup.js -e public/ -o public/"
   },
   "repository": {
     "type": "git",

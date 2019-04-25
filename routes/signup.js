@@ -3,9 +3,9 @@
  * @apiName SignupUser
  * @apiGroup Auth
  *
- * @apiParam {String} display_name User's display name.
- * @apiParam {String} email User's email.
- * @apiParam {String} password User's password.
+ * @apiParam (Request body) {String} display_name User's display name.
+ * @apiParam (Request body) {String} email User's email.
+ * @apiParam (Request body) {String} password User's password.
  *
  * @apiSuccess {Object} user User information.
  * @apiSuccess {Number} user.id User ID.

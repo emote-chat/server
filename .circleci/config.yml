@@ -3,17 +3,38 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:11 # node major version 11
+      - image: circleci/node:11
 
-      # Specify add'tl service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/mongo:3.4.4
-
+      # Set specific environment vars for postgres container  
+      # in order to create given db, user and pw
+      - image: circleci/postgres:11
+        environment:
+          POSTGRES_USER: emote
+          POSTGRES_DB: test
+          POSTGRES_PASSWORD: test123
+    
+    # Set build environment vars for app config
+    environment:
+      SECRET: test
+      TEST_DB_USER: emote
+      TEST_DB_NAME: test
+      TEST_DB_PASS: test123
+    
     working_directory: ~/server
 
     steps:
       - checkout
+
+      # Use dockerize to wait for dependencies
+      - run:
+          name: install dockerize
+          command: wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && sudo tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+          environment:
+            DOCKERIZE_VERSION: v0.6.1
+
+      - run:
+          name: Wait for db
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
 
       # Download and cache dependencies
       - restore_cache:

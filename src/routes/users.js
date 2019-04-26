@@ -1,12 +1,11 @@
 module.exports = (() => {
 	const express = require('express');
 	const router = express.Router();
-
-	// must have some middleware to verify user is authenticated
+	// const path = require('path');
+	// const userController = require(path.join(__dirname, '../controllers/user.controller'));
 
 	// API endpoint to update user profile (if time permits)
-	// router.put('/:id', (req, res) => {
-	// });
+	// router.put('/:id', userController.updateInfo);
 
 	// ... and other possible routes like deleting your own account (tbd)
 

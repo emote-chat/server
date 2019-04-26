@@ -2,10 +2,11 @@
   "name": "emote-server",
   "version": "1.0.0",
   "description": "Server-side for Emote mobile chat application",
-  "main": "app.js",
+  "main": "server.js",
   "scripts": {
-    "start": "node app.js",
-    "test": "jshint app.js routes"
+    "start": "node src/server.js",
+    "test": "jest --verbose --runInBand --detectOpenHandles",
+    "apidoc": "apidoc -i src/routes/ -e public/ -o public/"
   },
   "repository": {
     "type": "git",
@@ -17,15 +18,20 @@
     "url": "https://github.com/emote-chat/server/issues"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "bluebird": "^3.5.4",
     "body-parser": "^1.18.3",
     "dotenv": "^7.0.0",
     "express": "^4.16.4",
+    "express-jwt": "^5.3.1",
+    "jsonwebtoken": "^8.5.1",
     "path": "^0.12.7",
-    "pg": "^7.9.0",
     "pg-promise": "^8.6.5"
   },
   "devDependencies": {
-    "jshint": "^2.10.2"
+    "apidoc": "^0.17.7",
+    "fs": "0.0.1-security",
+    "jest": "^24.7.1",
+    "supertest": "^4.0.2"
   }
 }

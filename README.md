@@ -17,19 +17,9 @@
 1. Switch to the postgres UNIX account: `sudo -i -u postgres`
 1. Create a username and password (replace `username` with desired username): `createuser username --pwprompt`
 1. Enter password to be used for the user you just created
-1. Create a database (replace `database` with desired database name): `createdb database`
-1. Exit the postgres UNIX account: `exit`
-1. Access the postgres prompt of the user and database you created (replace `database` and `username` with that which you just created): `psql -h localhost -d database -U username`
-1. Import table initialization queries at the root of the project: `\i /pathtoproject/init_tables.sql`
-1. Import test data queries at the root of the project: `\i /pathtoproject/init_test_data.sql`
-1. Exit postgres prompt: `\q`
-1. Create a file named `.env` at the root of the project and with the following information (replace `username` with your username and `password` with the username password):
-```sh
-DB_HOST=localhost
-DB_PORT=5432
-DB_USER=username
-DB_PASS=password
-```
+1. To create a database (replace `database` with desired database name): `createdb database`
+1. To exit the postgres UNIX account: `exit`
+1. Create a file named `.env` at the root of the project with the variables in `.env.example` and replace with the host, user, user password and database information for the databases you'll be using for development and testing respectively. `DEV_DB_HOST` and `TEST_DB_HOST` default to `localhost` so you don't have to include those variables if you plan to use `localhost`. It is suggested that you specify separate tables for `DEV_DB_NAME` and `TEST_DB_NAME` since the test suites will wipe the test database clean before running the tests. Please note that production database information is only accessible to the project owners.
 
 ## Locally Run Server
 
@@ -38,6 +28,12 @@ OS X, Linux and Windows:
 ```sh
 npm install
 npm start
+```
+
+## Locally Run Tests
+```sh
+npm install
+npm test
 ```
 
 ### NLP Installation

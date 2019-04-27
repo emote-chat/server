@@ -23,13 +23,9 @@ const authenticate = async (user) => {
 
 const authorize = async (password, hash) => {
     // use bcrypt to compare user plaintext pw to hash
-    const match = await bcrypt.compare(password, hash);
+    const isMatch = await bcrypt.compare(password, hash);
 
-    if (match) {
-	return true;
-    }
-
-    return false;
+    return isMatch;
 }
 			
 exports.authorize = authorize;

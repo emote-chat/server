@@ -73,13 +73,16 @@ describe('Test Suite for auth', () => {
     // POST /login
     test('POST /login with no data should respond with 400', async (done) => {
         const res = await request(server).post('/login');
-        // expect error since missing data
+	// expect error since missing data
         expect(res.statusCode).toBe(400);
         done();
     });
 
     test('POST /login should respond with 200', async (done) => {
-        const res = await request(server).post('/login').send({ "email": user.email, "password": user.password });
+        const res = await request(server).post('/login').send({
+	    "email": user.email,
+	    "password": user.password
+	});
 	
         // expect success
 	expect(res.statusCode).toBe(200);
@@ -101,14 +104,22 @@ describe('Test Suite for auth', () => {
     });
     
     test('POST /login with invalid email should respond with 401', async (done) => {
-        const res = await request(server).post('/login').send({ "email": "invalid_email@invalid_email.com", "password": user.password });
+        const res = await request(server).post('/login').send({
+	    "email": "invalid_email@invalid_email.com",
+	    "password": user.password
+	});
+	
         // expect error since email is incorrect
         expect(res.statusCode).toBe(401);
         done();
     });
 
     test('POST /login with invalid password should respond with 401', async (done) => {
-        const res = await request(server).post('/login').send({ "email": user.email, "password": "invalid_password" });
+        const res = await request(server).post('/login').send({
+	    "email": user.email,
+	    "password": "invalid_password"
+	});
+	
         // expect error since password is incorrect
         expect(res.statusCode).toBe(401);
         done();

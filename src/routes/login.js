@@ -3,7 +3,6 @@
  * @apiName LoginUser
  * @apiGroup Auth
  *
- * @apiParam (Request body) {String} display_name User's display name.
  * @apiParam (Request body) {String} email User's email.
  * @apiParam (Request body) {String} password User's password.
  *
@@ -29,7 +28,7 @@
  *          "expires_in": "2 days"
  *     }
  *
- * @apiError MissingFields Missing one or more of required fields <code>email</code>, <code>password</code> and/or <code>display_name</code>.
+ * @apiError MissingFields Missing one or more of required fields <code>email</code> and/or <code>password</code>.
  * 
  * @apiErrorExample Error-Response:
  *     HTTP/1.1 400 Bad Request
@@ -37,12 +36,12 @@
  *          "message": "Missing fields"
  *     }
  * 
- * @apiError UserAlreadyExists The <code>email</code> belongs to an existing user.
+ * @apiError UnauthorizedAccess The <code>email</code> and/or <code>password</code> provided do not match a valid account.
  *
  * @apiErrorExample Error-Response:
- *     HTTP/1.1 400 Bad Request
+ *     HTTP/1.1 401 Unauthorized
  *     {
- *          "message": "Account with that email already exists"
+ *          "message": "Email or password is incorrect"
  *     }
 */
 module.exports = (() => {

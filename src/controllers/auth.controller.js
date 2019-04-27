@@ -21,11 +21,21 @@ const authenticate = async (user) => {
     }
 }
 
-// const authorize = async (password, hash) => {
-//     // use bcrypt to properly compare user plaintext pw to hash
-// }
+const authorize = async (password, hash) => {
+    // use bcrypt to compare user plaintext pw to hash
+    console.log(password);
+    console.log(hash);
 
-// exports.authorize = authorize;
+    const match = await bcrypt.compare(password, hash);
+
+    if (match) {
+	return true;
+    }
+
+    return false;
+}
+			
+exports.authorize = authorize;
 
 exports.signup = async (req, res, next) => {
     if( !req.body.display_name || !req.body.email || !req.body.password ) {
@@ -63,27 +73,37 @@ exports.signup = async (req, res, next) => {
     }
 }
 
-// exports.login = async (req, res, next) => {
-//     try {
-//         if (!req.body.email || !req.body.password) {
-//             return res.status(400).json({ message: 'Missing fields' });
-//         }
-//         const errorMessage = 'Email or password is incorrect';
-//         // verify that user with given email already exists
-//         // .any is used to not throw an error if the query doesn't return any data
-//         const users = await db.any(queries.findUser, [req.body.email]);
-//         if (!users.length) return res.status(401).json({ message: errorMessage });
+exports.login = async (req, res, next) => {
+     try {
+         if (!req.body.email || !req.body.password) {
+             return res.status(400).json({ message: 'Missing fields' });
+	 }
+         const errorMessage = 'Email or password is incorrect';
+	 
+         // verify that user with given email already exists
+         // .any is used to not throw an error if the query doesn't return any data
+         const users = await db.any(queries.findUser, [req.body.email]);
+         if (!users.length) return res.status(401).json({ message: errorMessage });
 
-//         // plaintext pw
-//         const password = req.body.password;
-//         // user id, email and password in db
-//         const { hash, ...user} = users[0];
+         // plaintext pw
+         const userSentPassword = req.body.password;
+         // user id, email and password in db
+         const { password, ...user} = users[0];
 
-//         // verify given password is correct by calling func called authorize with password and hash as params
-//         // if incorrect return res.status(401).json({ message: errorMessage });
-//         // else send token by calling authenticate func above with user as param
-//     }
-//     catch(error) {
-//         if(error) return next(error);
-//     }
-// };
+	 // authorize user
+	 const authorization = await authorize(userSentPassword, password);
+
+	 console.log(authorization);
+
+	 // if incorrect login info, return auth error
+	 if (!authorization) return res.status(401).json({ message: errorMessage });
+
+	 // else send token by calling authenticate func above with user as param
+	 const authentication = await authenticate(user);
+	 
+	 return res.status(200).json(authentication);
+     }
+     catch(error) {
+         if(error) return next(error);
+     }
+};

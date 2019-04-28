@@ -1,9 +1,11 @@
 import os
 import re
+import pickle
+import signal
 from twython import Twython
 from twython import TwythonStreamer
 
-outputFile = open('rawtweets.txt', 'a')
+emoji_dict = dict()
 
 # Twitter Setup
 TWITTER_KEY = os.environ.get('TWITTER_KEY')
@@ -14,7 +16,7 @@ Define emoji unicode here
 Examples:
 1F602 = happy, 1F62D = sad, 1F621= angry, 2764 = love, 1F61C = playful, 1F631 = confused
 '''
-EMOJIS = [u'\U0001F602']
+EMOJIS = [u'\U0001F621']
 
 class MyStreamer(TwythonStreamer):
     def on_success(self, data):
@@ -89,8 +91,7 @@ def connectTwitterSearch():
     for emoji in EMOJIS:
         QUERY = '&'.join(emoji)
         RESULTS = twitter.search(q=QUERY, count=100, result_type='mixed', lang='en')
-        # print(QUERY)
-        # print(RESULTS['search_metadata'])
+
         for tweet in RESULTS['statuses']:
             cleanTweet(tweet['text'])
 
@@ -98,6 +99,7 @@ def connectTwitterSearch():
 Cleans raw tweets and prepares for proper storage
 '''
 def cleanTweet(tweet):
+    global emoji_dict
     # Don't use tweet if retweet or has URL
     if (('RT' not in tweet) and ('http://' not in tweet) and ('https://' not in tweet)):
         # Convert emojis to code
@@ -110,17 +112,39 @@ def cleanTweet(tweet):
         regex = r'\#\S+|\@\S+|\\U\w+'
         tweet = re.sub(regex, '', tweet, flags=re.MULTILINE).strip()
 
-        # Store in format emoji + @ + tweet
         # Remove duplicates, and write one row per emoji if multiple emojis
         for emoji in set(emojis):
-            outputFile.write(emoji + ' @ ' + tweet + '\n')
+            try:
+                emoji_dict[emoji].append(tweet)
+            except KeyError:
+                emoji_dict[emoji] = [tweet]
 
 '''
-Choose whether to use the stream or search Twitter API
+Main function
 '''
 def main():
+    if os.path.getsize('tweets') > 0:
+        inputFile = open('tweets', 'rb')
+        global emoji_dict
+        emoji_dict = pickle.load(inputFile)
+        inputFile.close()
+
+    # Choose whether to use the stream or search Twitter API
     connectTwitterStream()
     # connectTwitterSearch()
 
+def keyboardInterruptHandler(signal, frame):
+    global emoji_dict
+    print('KeyboardInterrupt (ID: {}) has been caught. Cleaning up...'.format(signal))
+
+    # When done streaming, open the output file and dump emoji_dict into it
+    outputFile = open('tweets', 'wb+')
+    pickle.dump(emoji_dict, outputFile)
+
+    outputFile.close()
+
+    exit(0)
+
+signal.signal(signal.SIGINT, keyboardInterruptHandler)
+
 main()
-outputFile.close()

@@ -50,10 +50,9 @@ def twitterCred():
     OAUTH_TOKEN = ''
     OAUTH_TOKEN_SECRET = ''
     OAUTH_VERIFIER = ''
-
     twitter = Twython(TWITTER_KEY, TWITTER_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
     final_step = twitter.get_authorized_tokens(OAUTH_VERIFIER)
-
+    print(final_step)
     os.environ['OAUTH_TOKEN'] = final_step['oauth_token']
     os.environ['OAUTH_TOKEN_SECRET'] = final_step['oauth_token_secret']
 
@@ -63,6 +62,7 @@ PART 3: USE CREDENTIALS TO OPEN STREAM
 def openStream():
     OAUTH_TOKEN = os.environ.get('OAUTH_TOKEN')
     OAUTH_TOKEN_SECRET = os.environ.get('OAUTH_TOKEN_SECRET')
+
     QUERY = '&'.join(EMOJIS[0]) # I think we can only open one stream at a time
 
     stream = MyStreamer(TWITTER_KEY, TWITTER_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
@@ -112,12 +112,11 @@ def cleanTweet(tweet):
         regex = r'\#\S+|\@\S+|\\U\w+'
         tweet = re.sub(regex, '', tweet, flags=re.MULTILINE).strip()
 
-        # Remove duplicates, and write one row per emoji if multiple emojis
-        for emoji in set(emojis):
-            try:
-                emoji_dict[emoji].append(tweet)
-            except KeyError:
-                emoji_dict[emoji] = [tweet]
+        # Remove duplicates
+        try:
+            emoji_dict[EMOJIS[0]].append(tweet)
+        except KeyError:
+            emoji_dict[EMOJIS[0]] = [tweet]
 
 '''
 Main function
@@ -135,7 +134,7 @@ def main():
 
 def keyboardInterruptHandler(signal, frame):
     global emoji_dict
-    print('KeyboardInterrupt (ID: {}) has been caught. Cleaning up...'.format(signal))
+    print('KeyboardInterrupt'.format(signal))
 
     # When done streaming, open the output file and dump emoji_dict into it
     outputFile = open('tweets', 'wb+')

@@ -37,7 +37,7 @@ exports.authorize = authorize;
 
 const createUser = async (user) => {
     try {
-        // .none returns null if successful
+        // returning user id
         return await db.one(queries.createUser, user);
     }
     catch(error) {

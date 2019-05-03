@@ -36,10 +36,10 @@ const authorize = async (password, hash) => {
 
 exports.authorize = authorize;
 
-const addUser = async (user) => {
+const createUser = async (user) => {
     try {
         // .none returns null if successful
-        await db.none(queries.addUser, user);
+        await db.none(queries.createUser, user);
     }
     catch(error) {
         return Promise.reject({ message: 'Add user failed' });
@@ -68,7 +68,7 @@ exports.signup = async (req, res, next) => {
         ];
 
         // otherwise add new user with given info
-        await addUser(user);
+        await createUser(user);
 
         // get user with given email (minus their password)
         const { password, ...userWithoutPw } = await db.one(queries.findUser, [req.body.email]);

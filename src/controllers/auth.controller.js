@@ -3,7 +3,7 @@ const path = require('path');
 
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const db = require(path.join(__dirname, '../config/db'));
+const db = require(path.join(__dirname, '../db/index'));
 const queries = require(path.join(__dirname, '../db/queries'));
 
 const authenticate = (user) => {

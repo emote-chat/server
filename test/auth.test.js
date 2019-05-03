@@ -10,6 +10,7 @@ const user = {
     password: 'gmail'
 }
 
+// hard-coded invalid user for testing
 const invalidUser = {
     email: 'user@yahoo.com',
     password: 'yahoo'
@@ -30,7 +31,7 @@ describe('Test Suite for auth', () => {
     
     beforeAll(async (done) => {
         server = await app.listen();
-        db = require(path.join(__dirname, '../src/config/db'));
+        db = require(path.join(__dirname, '../src/db/index'));
         await initDb(db);
         done();
     })

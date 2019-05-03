@@ -16,7 +16,7 @@ const authenticate = (user) => {
     );
 
     return {
-        user: user,
+        user,
         access_token: accessToken,
         expires_in: expiresIn
     }
@@ -26,7 +26,6 @@ const authorize = async (password, hash) => {
     try {
         // use bcrypt to compare user plaintext pw to hash
         const isMatch = await bcrypt.compare(password, hash);
-    
         return isMatch;
     }
     catch(error) {
@@ -39,12 +38,14 @@ exports.authorize = authorize;
 const createUser = async (user) => {
     try {
         // .none returns null if successful
-        await db.none(queries.createUser, user);
+        return await db.one(queries.createUser, user);
     }
     catch(error) {
-        return Promise.reject({ message: 'Add user failed' });
+        return Promise.reject({ message: 'Create user failed' });
     }
 }
+
+exports.createUser = createUser;
 
 exports.signup = async (req, res, next) => {
     
@@ -56,7 +57,7 @@ exports.signup = async (req, res, next) => {
         const saltRounds = 12; // 2^12 iterations
         // check if user with given email already exists
         // .any is used to not throw an error if the query doesn't return any data
-        const users = await db.any(queries.findUser, [req.body.email]);
+        const users = await db.any(queries.findUserByEmail, [req.body.email]);
         if (users.length) return res.status(400).json({ message: 'Account with that email already exists' });
 
         const user = [
@@ -68,17 +69,18 @@ exports.signup = async (req, res, next) => {
         ];
 
         // otherwise add new user with given info
-        await createUser(user);
+        const { id } = await createUser(user);
 
         // get user with given email (minus their password)
-        const { password, ...userWithoutPw } = await db.one(queries.findUser, [req.body.email]);
+        const { password, ...userWithoutPw } = await db.one(queries.findUserById, [id]);
         // authenticate user
         const authentication = authenticate(userWithoutPw);
-        
+
         // success; return user info, access token and expiration
         return res.status(200).json(authentication);
     }
     catch(error) {
+        console.log(error);
         if (error) return next(error);
     }
 }
@@ -91,7 +93,7 @@ exports.login = async (req, res, next) => {
     try {
         // verify that user with given email already exists
         // .any is used to not throw an error if the query doesn't return any data
-        const users = await db.any(queries.findUser, [req.body.email]);
+        const users = await db.any(queries.findUserByEmail, [req.body.email]);
         const errorMessage = 'Email or password is incorrect';
         if (!users.length) return res.status(401).json({ message: errorMessage });
 

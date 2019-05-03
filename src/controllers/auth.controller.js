@@ -50,7 +50,7 @@ exports.createUser = createUser;
 exports.signup = async (req, res, next) => {
     
     if (!req.body.display_name || !req.body.email || !req.body.password) {
-        return res.status(400).json({ message: 'Missing fields' });
+        return next('Missing fields');
     }
     
     try {
@@ -58,7 +58,7 @@ exports.signup = async (req, res, next) => {
         // check if user with given email already exists
         // .any is used to not throw an error if the query doesn't return any data
         const users = await db.any(queries.findUserByEmail, [req.body.email]);
-        if (users.length) return res.status(400).json({ message: 'Account with that email already exists' });
+        if (users.length) return next('Account with that email already exists');
 
         const user = [
             req.body.display_name,
@@ -76,18 +76,17 @@ exports.signup = async (req, res, next) => {
         // authenticate user
         const authentication = authenticate(userWithoutPw);
 
-        // success; return user info, access token and expiration
-        return res.status(200).json(authentication);
+        // created; return user info, access token and expiration
+        return res.status(201).json(authentication);
     }
     catch(error) {
-        console.log(error);
         if (error) return next(error);
     }
 }
 
 exports.login = async (req, res, next) => {
     if (!req.body.email || !req.body.password) {
-	    return res.status(400).json({ message: 'Missing fields' });
+	    return next('Missing fields');
     }
     
     try {

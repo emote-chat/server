@@ -33,7 +33,7 @@ describe('Test Suite for auth', () => {
         const res = await request(server).post('/api/signup').send(user);
 
         // expect success
-        expect(res.statusCode).toBe(200);
+        expect(res.statusCode).toBe(201);
 
         // verify response data is correct
         expect(JSON.parse(res.text)).toEqual({

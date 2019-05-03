@@ -1,28 +1,6 @@
 const path = require('path');
 const request = require('supertest');
-const app = require(path.join(__dirname, '../src/config/app'));
-const fs = require('fs');
-
-// hard-coded user for testing
-const user = { 
-    display_name: 'manos',
-    email: 'user@gmail.com', 
-    password: 'gmail'
-}
-
-// hard-coded invalid user for testing
-const invalidUser = {
-    email: 'user@yahoo.com',
-    password: 'yahoo'
-}
-
-// init db; drop and recreate tables
-const initDb = async (db) => {
-    const sql = fs.readFileSync(
-        path.join(__dirname, '../src/db/init_db.sql')
-    ).toString();
-    await db.multi(sql);
-}
+const { initDb, user, invalidUser } = require(path.join(__dirname, 'helpers/db'));
 
 describe('Test Suite for auth', () => {
     
@@ -34,13 +12,13 @@ describe('Test Suite for auth', () => {
         db = require(path.join(__dirname, '../src/db/index'));
         await initDb(db);
         done();
-    })
+    });
 
     afterAll(async (done) => {
         await db.$pool.end();
         await server.close(done);
         done();
-    })
+    });
 
     // POST /api/signup
     test('POST /api/signup with no data should respond with 400', async (done) => {

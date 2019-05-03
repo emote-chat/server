@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node src/server.js",
-    "test": "jest --verbose --runInBand --detectOpenHandles",
+    "test": "jest --runInBand --detectOpenHandles",
     "apidoc": "apidoc -i src/routes/ -e public/ -o public/"
   },
   "repository": {

@@ -8,14 +8,10 @@ const app = express();
 const jwt = require('express-jwt');
 
 // bring in route defs
-const signupRouter = require(path.join(__dirname, 'routes/signup'));
-const loginRouter = require(path.join(__dirname, 'routes/login'));
-const usersRouter = require(path.join(__dirname, 'routes/users')); 
-const chatsRouter = require(path.join(__dirname, 'routes/chats'));
-const messagesRouter = require(path.join(__dirname, 'routes/messages'));
+const router = require(path.join(__dirname, '../routes/index'));
 
 // global error handler
-const errorHandler = require(path.join(__dirname, 'helpers/errorHandler'));
+const errorHandler = require(path.join(__dirname, '../helpers/error'));
 
 // set app port and mode; default to dev't and 5710 respectively
 app.set('port', process.env.PORT || 5710);
@@ -26,21 +22,17 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // serve API documentation generated via apidoc at /
-app.use(express.static(path.join(__dirname, "../public")));
+app.use(express.static(path.join(__dirname, '../../public')));
 
 // middleware for verifying token for protected routes
-const unprotectedRoutes = ['/login', '/signup', '/'];
+const unprotectedRoutes = ['/api/login', '/api/signup', '/'];
 app.use(jwt({
     secret: process.env.SECRET,
     credentialsRequired: true
 }).unless({ path: unprotectedRoutes }));
 
-// set app to use the given paths for the given route defs
-app.use('/signup', signupRouter);
-app.use('/login', loginRouter);
-app.use('/user', usersRouter);
-app.use('/chat', chatsRouter);
-app.use('/message', messagesRouter);
+// set app to use the given prefix for the routes
+app.use('/api', router);
 
 // global error handler
 app.use(errorHandler);

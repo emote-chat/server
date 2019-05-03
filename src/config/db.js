@@ -34,5 +34,3 @@ module.exports = (() => {
     // return db instance
     return pgp(config[env]);
 })();
-
-

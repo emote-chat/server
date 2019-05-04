@@ -26,13 +26,5 @@ module.exports = (() => {
         }
     };
 
-    // pg-promise setup
-    const pgp = require('pg-promise')({
-        promiseLib: require('bluebird') // overriding the default (ES6 Promise)
-    });
-
-    // return db instance
-    return pgp(config[env]);
+    return config[env];
 })();
-
-

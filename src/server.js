@@ -1,5 +1,5 @@
 const path = require('path');
-const app = require(path.join(__dirname, 'app'));
+const app = require(path.join(__dirname, 'config/app'));
 
 app.listen(app.get('port'), () => {
 	const isModeProduction = app.get('mode') === 'production';

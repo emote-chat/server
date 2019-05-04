@@ -7,7 +7,7 @@ module.exports = (() => {
 	// API endpoint to add user reaction to message in users_messages_emojis table
 	// router.post('/:mid/react', messageController.addReaction);
 
-	// ... and other possible routes like removing reaction (tbd)
+	// ... and other possible routes like updating/removing message and removing reaction (tbd)
 	
 	return router;
 })();

@@ -1,5 +1,5 @@
 /**
- * @api {post} /signup Register new user
+ * @api {post} /signup Sign up user
  * @apiName SignupUser
  * @apiGroup Auth
  *
@@ -15,7 +15,7 @@
  * @apiSuccess {String} access_token JSON Web Token (JWT).
  * @apiSuccess {String} expires_in Amount of time in which the JWT will expire.
  *
- * @apiSuccessExample Success-Response:
+ * @apiSuccessExample Success Response:
  *     HTTP/1.1 200 OK
  *     {
  *          "user": {
@@ -31,15 +31,15 @@
  *
  * @apiError MissingFields Missing one or more of required fields <code>email</code>, <code>password</code> and/or <code>display_name</code>.
  * 
- * @apiErrorExample Error-Response:
+ * @apiErrorExample MissingFields Error Response:
  *     HTTP/1.1 400 Bad Request
  *     {
  *          "message": "Missing fields"
  *     }
  * 
- * @apiError UserAlreadyExists The <code>email</code> belongs to an existing user.
+ * @apiError InvalidSignup The <code>email</code> belongs to an existing user.
  *
- * @apiErrorExample Error-Response:
+ * @apiErrorExample InvalidSignup Error Response:
  *     HTTP/1.1 400 Bad Request
  *     {
  *          "message": "Account with that email already exists"

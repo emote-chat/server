@@ -176,12 +176,20 @@ module.exports = (() => {
 	*          "message": "Invalid/missing token"
 	*     }
 	*
-	* @apiError MembershipError Not a member of the chat.
+	* @apiError MembershipError User making request is not a member of the chat.
 	*
 	* @apiErrorExample MembershipError Response:
 	*     HTTP/1.1 401 Unauthorized
 	*     {
 	*          "message": "Not a member of this chat"
+	*     }
+	*
+	* @apiError AddUserError User being added is already a member of chat.
+	*
+	* @apiErrorExample AddUserError Response:
+	*     HTTP/1.1 400 Bad Request
+	*     {
+	*          "message": "User already member of chat"
 	*     }
 	*/
 	router.post('/:cid/:uid', chatController.addUserToChat);

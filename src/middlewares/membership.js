@@ -6,7 +6,7 @@ const getPayload = require(path.join(__dirname, '../helpers/jwt'));
 
 module.exports = async (req, res, next) => {
     const { id: userId } = getPayload(req.headers);
-    const joinedChats = await db.any(queries.findChatsByUserId, [userId]);
+    const joinedChats = await db.any(queries.findChatIdsByUserId, [userId]);
     const isMember = joinedChats.filter( ({ chats_id }) => {
         return parseInt(req.params.cid) === chats_id
     }).length !== 0;

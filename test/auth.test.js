@@ -29,7 +29,7 @@ describe('Test Suite for auth', () => {
         done();
     });
 
-    test('POST /api/signup should respond with 200', async (done) => {
+    test('POST /api/signup should respond with 201', async (done) => {
         const res = await request(server).post('/api/signup').send(user);
 
         // expect success

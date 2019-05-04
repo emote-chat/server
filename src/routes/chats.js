@@ -48,8 +48,8 @@ module.exports = (() => {
 	* @apiHeader {String} token Authorization Bearer Token.
 	* @apiParam (Request body) {String} [name] Chat's name.
 	*
-	* @apiSuccess {Number} id Chat ID.
-	* @apiSuccess {String} name Chat name.
+	* @apiSuccess (Success 201) {Number} id Chat ID.
+	* @apiSuccess (Success 201) {String} name Chat name.
 	*
 	* @apiSuccessExample Success Response:
 	*     HTTP/1.1 201 Created
@@ -82,11 +82,11 @@ module.exports = (() => {
 	* @apiSuccess {Object[]} - List of messages.
 	* @apiSuccess {Number} -.id Message id.
 	* @apiSuccess {String} -.text Message text.
-	* @apiSuccess {Object} user User information.
- 	* @apiSuccess {Number} user.id User ID.
- 	* @apiSuccess {String} user.display_name User display name.
- 	* @apiSuccess {String} user.first_name User first name.
- 	* @apiSuccess {String} user.last_name User last name.
+	* @apiSuccess {Object} -.user User information.
+ 	* @apiSuccess {Number} -.user.id User ID.
+ 	* @apiSuccess {String} -.user.display_name User display name.
+ 	* @apiSuccess {String} -.user.first_name User first name.
+ 	* @apiSuccess {String} -.user.last_name User last name.
 	*
 	* @apiSuccessExample Success Response:
 	*     HTTP/1.1 200 OK

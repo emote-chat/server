@@ -14,7 +14,7 @@
  * @apiSuccess {String} access_token JSON Web Token (JWT).
  * @apiSuccess {String} expires_in Amount of time in which the JWT will expire.
  *
- * @apiSuccessExample Success-Response:
+ * @apiSuccessExample Success Response:
  *     HTTP/1.1 200 OK
  *     {
  *          "user": {
@@ -30,15 +30,15 @@
  *
  * @apiError MissingFields Missing one or more of required fields <code>email</code> and/or <code>password</code>.
  * 
- * @apiErrorExample Error-Response:
+ * @apiErrorExample MissingFields Error Response:
  *     HTTP/1.1 400 Bad Request
  *     {
  *          "message": "Missing fields"
  *     }
  * 
- * @apiError UnauthorizedAccess The <code>email</code> and/or <code>password</code> provided do not match a valid account.
+ * @apiError InvalidLogin The <code>email</code> and/or <code>password</code> provided do not match a valid account.
  *
- * @apiErrorExample Error-Response:
+ * @apiErrorExample InvalidLogin Error Response:
  *     HTTP/1.1 401 Unauthorized
  *     {
  *          "message": "Email or password is incorrect"

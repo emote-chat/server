@@ -99,8 +99,8 @@ module.exports = (() => {
 	*                    "id": 2,
 	*                    "email": "test123@yahoo.com",
 	*                    "display_name": "bob",
-	*                    "first_name": bob,
-	*                    "last_name": bob
+	*                    "first_name": "bob",
+	*                    "last_name": "bob"
 	*               }
 	*          },
 	*          {

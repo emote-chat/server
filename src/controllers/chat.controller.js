@@ -10,7 +10,9 @@ const addUser = async (userId, chatId) => {
         await db.none(queries.addUserToChat, [userId, chatId]);
     }
     catch(error) {
-        return Promise.reject('User already member of chat');
+        return error.constraint === 'users_chats_pkey' ? 
+            Promise.reject('User already member of chat') :
+            Promise.reject(error);
     }
 }
 

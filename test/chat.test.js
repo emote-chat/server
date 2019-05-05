@@ -261,8 +261,8 @@ describe('Test Suite for chat', () => {
 
         done();
     });
-    
-    test('DELETE /api/chat/1/1 should respond with 401 if user NOT member of chat', async (done) => {
+
+    test('DELETE /api/chat/:cid/:uid should respond with 401 if user NOT member of chat', async (done) => {
         const { statusCode } = await request(server)
             .delete('/api/chat/1/1')
             .set('Authorization', 'Bearer ' + otherUserAccessToken);

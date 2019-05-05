@@ -7,9 +7,12 @@ const getPayload = require(path.join(__dirname, '../helpers/jwt'));
 
 const addUser = async (userId, chatId) => {
     try {
+        // add user id and chat id to users_chats
         await db.none(queries.addUserToChat, [userId, chatId]);
     }
     catch(error) {
+        // check if primary key constraint violated
+        // return error str indicating that or return error itself
         return error.constraint === 'users_chats_pkey' ? 
             Promise.reject('User already member of chat') :
             Promise.reject(error);
@@ -24,8 +27,9 @@ exports.createChat = async (req, res, next) => {
         // create chat; return id
         const { id: chatId } = await db.one(queries.createChat, [name]);
         
+        // get user id from auth headers
         const { id: userId } = getPayload(req.headers);
-        // add user who created the chat to the chat
+        // add user id (of user making req) and chat id to users_chats table
         await addUser(userId, chatId);
         
         // get chat just added to table, searching by id returned 
@@ -45,17 +49,20 @@ exports.createMessage = async (req, res, next) => {
             return next('Missing fields');
         }
 
+        // get user id from auth headers
         const { id: userId } = getPayload(req.headers);
+
         // message values: chat id, user id and text
         const message = [
             req.params.cid,
             userId,
             req.body.text
         ];
-        // add message to chat
+
+        // add message to messages table
         await db.none(queries.createMessage, message);
 
-        // created message; return nothing
+        // success; return nothing
         return res.status(201).json();
     }
     catch(error) {
@@ -65,7 +72,9 @@ exports.createMessage = async (req, res, next) => {
 
 exports.getUserChats = async (req, res, next) => {
     try {
+        // get user id from req headers
         const { id: userId } = getPayload(req.headers);
+        // get chat id and name by user id 
         const chats = await db.any(queries.findChatsByUserId, [userId]);
 
         // success; return user's chats
@@ -78,9 +87,11 @@ exports.getUserChats = async (req, res, next) => {
 
 exports.getMessagesInChat = async (req, res, next) => {
     try {
-        // get messages in chat
+        // get messages by chat id inc user info
         const resp = await db.any(queries.findMessagesByChatId, [req.params.cid]);
-        // shape returned data
+
+        // shape returned data with message id, text, created_at
+        // and user info obj 
         const messages = resp.map(({ users_id, id, chats_id, text, created_at, ...userWithPw}) => {
             const { password, ...user } = userWithPw;
             return {
@@ -101,9 +112,9 @@ exports.getMessagesInChat = async (req, res, next) => {
 
 exports.addUserToChat = async (req, res, next) => {
     try {
-        // add user to chat
+        // add user id and chat id to users_chats
         await addUser(req.params.uid, req.params.cid);
-        // created new entry in chat; return nothing
+        // success; return nothing
         return res.status(201).json();
     }
     catch(error) {
@@ -113,9 +124,10 @@ exports.addUserToChat = async (req, res, next) => {
 
 exports.deleteUserFromChat = async (req, res, next) => {
     try {
-        // delete user from chat
-        await db.none(queries.deleteUserFromChat, [req.params.uid]);
-        // deleted user from chat; return nothing
+        // delete row from users_chats 
+        // where chat id and user id match params
+        await db.none(queries.deleteUserFromChat, [req.params.cid, req.params.uid]);
+        // success; return nothing
         return res.status(204).json();
     }
     catch(error) {

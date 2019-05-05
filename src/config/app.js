@@ -30,7 +30,7 @@ if (app.get('mode') === 'production') {
         }, 
         stream: __dirname + '/../morgan.log' 
     }));
-} else {
+} else if (app.get('mode') === 'development') {
     app.use(morgan('dev'));
 }
 

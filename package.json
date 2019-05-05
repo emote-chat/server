@@ -4,6 +4,7 @@
   "description": "Server-side for Emote mobile chat application",
   "main": "server.js",
   "scripts": {
+    "prestart": "node src/db/migrations/seed.js",
     "start": "node src/server.js",
     "test": "jest --runInBand --detectOpenHandles",
     "apidoc": "apidoc -i src/routes/ -e public/ -o public/"
@@ -25,11 +26,13 @@
     "express": "^4.16.4",
     "express-jwt": "^5.3.1",
     "jsonwebtoken": "^8.5.1",
+    "morgan": "^1.9.1",
     "path": "^0.12.7",
     "pg-promise": "^8.6.5"
   },
   "devDependencies": {
     "apidoc": "^0.17.7",
+    "axios": "^0.18.0",
     "fs": "0.0.1-security",
     "jest": "^24.7.1",
     "supertest": "^4.0.2"

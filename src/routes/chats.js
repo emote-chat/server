@@ -14,20 +14,21 @@ module.exports = (() => {
 	* @apiHeader {String} token Authorization Bearer Token.
 	*
 	* @apiSuccess {Object[]} - List of chats.
-	* @apiSuccess {String} -.id Chats id.
+	* @apiSuccess {Number} -.id Chat id.
+	* @apiSuccess {String} -.name Chat name.
 	*
 	* @apiSuccessExample Success Response:
 	*     HTTP/1.1 200 OK
-	*     [
-	*		{
-	*			"id": 1,
-	*			"name": "Chat 1"
-	*		},
-	*		{
-	*			"id": 4,
-	*			"name": "Chat 4"
-	*		}
-	*	 ]
+ 	*     [
+ 	*          {
+	*               "id": 1,
+	*               "name": "Chat 1"
+	*          },
+	*          {
+	*               "id": 4,
+	*               "name": "Chat 4"
+	*          }
+ 	*     ]
 	*
 	* @apiError UnauthorizedError Invalid/missing token in authorization header.
 	*
@@ -47,8 +48,8 @@ module.exports = (() => {
 	* @apiHeader {String} token Authorization Bearer Token.
 	* @apiParam (Request body) {String} [name] Chat's name.
 	*
-	* @apiSuccess {Number} id Chat ID.
-	* @apiSuccess {String} name Chat name.
+	* @apiSuccess (Success 201) {Number} id Chat ID.
+	* @apiSuccess (Success 201) {String} name Chat name.
 	*
 	* @apiSuccessExample Success Response:
 	*     HTTP/1.1 201 Created
@@ -78,38 +79,43 @@ module.exports = (() => {
 	* @apiParam {Number} cid Chat ID.
 	* @apiHeader {String} token Authorization Bearer Token.
 	*
-	* @apiSuccess {Object[]} - List of chats.
-	* @apiSuccess {String} -.id Chats id.
+	* @apiSuccess {Object[]} - List of messages.
+	* @apiSuccess {Number} -.id Message id.
+	* @apiSuccess {String} -.text Message text.
+	* @apiSuccess {Object} -.user User information.
+ 	* @apiSuccess {Number} -.user.id User ID.
+ 	* @apiSuccess {String} -.user.display_name User display name.
+ 	* @apiSuccess {String} -.user.first_name User first name.
+ 	* @apiSuccess {String} -.user.last_name User last name.
 	*
 	* @apiSuccessExample Success Response:
 	*     HTTP/1.1 200 OK
 	*     [
-	*		{
-	*			"id": 4,
-	*			"text": "here's a message",
-	*			"created_at": "2019-05-04T00:31:35.880Z",
-	*			"user": {
-	*				"id": 2,
-	*				"created_at": "2019-05-04T00:31:35.880Z",
-	*				"email": "test123@yahoo.com",
-	*				"display_name": "bob",
-	*				"first_name": bob,
-	*				"last_name": bob
-	*			}
-	*		},
-	*		{
-	*			"id": 2,
-	*			"text": "here's another message",
-	*			"created_at": "2019-05-03T23:33:41.659Z",
-	*			"user": {
-	*				"id": 1,
-	*				"email": "test123@gmail.com",
-	*				"display_name": "manos",
-	*				"first_name": null,
-	*				"last_name": null
-	*			}
-	*		},
-	*	 ]
+ 	*          {
+	*               "id": 4,
+	*               "text": "here's a message",
+	*               "created_at": "2019-05-04T00:31:35.880Z",
+	*               "user": {
+	*                    "id": 2,
+	*                    "email": "test123@yahoo.com",
+	*                    "display_name": "bob",
+	*                    "first_name": "bob",
+	*                    "last_name": "bob"
+	*               }
+	*          },
+	*          {
+	*               "id": 2,
+	*               "text": "here's another message",
+	*               "created_at": "2019-05-03T23:33:41.659Z",
+	*               "user": {
+	*                    "id": 1,
+	*                    "email": "test123@gmail.com",
+	*                    "display_name": "manos",
+	*                    "first_name": null,
+	*                    "last_name": null
+	*               }
+	*          }
+ 	*     ]
 	*
 	* @apiError UnauthorizedError Invalid/missing token in authorization header.
 	*

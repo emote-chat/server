@@ -7,16 +7,16 @@
  * @apiParam (Request body) {String} email User's email.
  * @apiParam (Request body) {String} password User's password.
  *
- * @apiSuccess {Object} user User information.
- * @apiSuccess {Number} user.id User ID.
- * @apiSuccess {String} user.display_name User display name.
- * @apiSuccess {String} user.first_name User first name.
- * @apiSuccess {String} user.last_name User last name.
- * @apiSuccess {String} access_token JSON Web Token (JWT).
- * @apiSuccess {String} expires_in Amount of time in which the JWT will expire.
+ * @apiSuccess (Success 201) {Object} user User information.
+ * @apiSuccess (Success 201) {Number} user.id User ID.
+ * @apiSuccess (Success 201) {String} user.display_name User display name.
+ * @apiSuccess (Success 201) {String} user.first_name User first name.
+ * @apiSuccess (Success 201) {String} user.last_name User last name.
+ * @apiSuccess (Success 201) {String} access_token JSON Web Token (JWT).
+ * @apiSuccess (Success 201) {String} expires_in Amount of time in which the JWT will expire.
  *
  * @apiSuccessExample Success Response:
- *     HTTP/1.1 200 OK
+ *     HTTP/1.1 201 Created
  *     {
  *          "user": {
  *              "id": 1,

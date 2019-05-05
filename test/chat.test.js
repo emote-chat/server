@@ -1,7 +1,8 @@
 const path = require('path');
 const request = require('supertest');
 const app = require(path.join(__dirname, '../src/config/app'));
-const { initDb, user, anotherUser } = require(path.join(__dirname, 'helpers/db'));
+const { user, anotherUser } = require(path.join(__dirname, 'helpers/db'));
+const { initSchema } = require(path.join(__dirname, '../src/db/migrations/seed'));
 
 describe('Test Suite for chat', () => {
 
@@ -14,7 +15,7 @@ describe('Test Suite for chat', () => {
     beforeAll(async (done) => {
         server = await app.listen();
         db = require(path.join(__dirname, '../src/db/index'));
-        await initDb(db);
+        await initSchema(db);
         
         // sign up user to retrieve valid access token
         const { text } = await request(server)

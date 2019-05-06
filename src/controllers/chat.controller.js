@@ -89,21 +89,7 @@ exports.getUserChats = async (req, res, next) => {
 exports.getMessagesInChat = async (req, res, next) => {
     try {
         // get messages by chat id inc user info
-        const resp = await db.any(queries.findMessagesByChatId, [req.params.cid]);
-
-        // shape returned data with message id, text, created_at
-        // and user info obj 
-        const messages = resp.map(({ users_id, id, chats_id, text, created_at, ...userWithPw}) => {
-            const { password, ...user } = userWithPw;
-            user.id = users_id; // tack on user id
-            
-            return {
-                id,
-                text,
-                created_at,
-                user
-            };
-        });
+        const messages = await db.any(queries.findMessagesByChatId, [req.params.cid]);
 
         // success; return array of messages
         return res.status(200).json(messages);

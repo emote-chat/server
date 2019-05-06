@@ -27,7 +27,8 @@ module.exports = {
             name, 
             json_agg(
                 json_build_object(
-                    'id', users_id, 'display_name', display_name
+                    'id', users_id, 
+                    'display_name', display_name
                 )
             ) AS users 
         FROM users_chats AS uc 
@@ -50,9 +51,15 @@ module.exports = {
     createMessage: new PS('create-message', 'INSERT INTO messages(chats_id, users_id, text) VALUES($1, $2, $3)'),
     findMessagesByChatId: new PS('find-messages-by-chat-id', 
         `SELECT 
-            users.id AS users_id, 
-            users.*, 
-            messages.* 
+            messages.id,
+            text,
+            created_at,
+            json_build_object(
+                'id', users.id, 
+                'display_name', users.display_name,
+                'first_name', users.first_name,
+                'last_name', users.last_name
+            ) AS user
         FROM messages 
         INNER JOIN users ON users.id=users_id 
         WHERE chats_id = $1`

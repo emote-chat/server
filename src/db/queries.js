@@ -52,17 +52,10 @@ module.exports = {
     findMessagesByChatId: new PS('find-messages-by-chat-id', 
         `SELECT 
             messages.id,
-            text,
+            users_id,
             created_at,
-            json_build_object(
-                'id', users.id, 
-                'email', users.email,
-                'display_name', users.display_name,
-                'first_name', users.first_name,
-                'last_name', users.last_name
-            ) AS user
+            text
         FROM messages 
-        INNER JOIN users ON users.id=users_id 
         WHERE chats_id = $1`
     ),
 }

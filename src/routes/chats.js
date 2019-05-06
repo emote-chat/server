@@ -16,6 +16,10 @@ module.exports = (() => {
 	* @apiSuccess {Object[]} - List of chats.
 	* @apiSuccess {Number} -.id Chat id.
 	* @apiSuccess {String} -.name Chat name.
+	* @apiSuccess {Object[]} -.users List of users.
+	* @apiSuccess {Object} -.users.- User.
+	* @apiSuccess {Number} -.users.-.id User ID.
+	* @apiSuccess {String} -.users.-.display_name User display name.
 	*
 	* @apiSuccessExample Success Response:
 	*     HTTP/1.1 200 OK
@@ -23,10 +27,30 @@ module.exports = (() => {
  	*          {
 	*               "id": 1,
 	*               "name": "Chat 1"
+	*               "users": [
+	*                    {
+	*                         "id": 1,
+	*                         "display_name": "User 1 display name",
+	*                    },
+	*                    {
+	*                         "id": 2,
+	*                         "display_name": "User 2 display name",
+	*                    }
+	*               ]
 	*          },
 	*          {
 	*               "id": 4,
 	*               "name": "Chat 4"
+	*               "users": [
+	*                    {
+	*                         "id": 2,
+	*                         "display_name": "User 2 display name",
+	*                    },
+	*                    {
+	*                         "id": 3,
+	*                         "display_name": "User 3 display name",
+	*                    }
+	*               ]
 	*          }
  	*     ]
 	*

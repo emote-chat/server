@@ -48,7 +48,7 @@ describe('Test Suite for chat', () => {
         const { statusCode } = await request(server)
             .get('/api/chat');
 
-        // expect success since authenticated
+        // expect not authorized error since token not set/sent in headers
         expect(statusCode).toBe(401);
 
         done();
@@ -59,7 +59,6 @@ describe('Test Suite for chat', () => {
             .get('/api/chat')
             .set('Authorization', 'Bearer ' + accessToken);
 
-        // expect success since authenticated
         expect(statusCode).toBe(200);
 
         // expect resp to be an array
@@ -85,7 +84,6 @@ describe('Test Suite for chat', () => {
             .post('/api/chat')
             .set('Authorization', 'Bearer ' + accessToken);
 
-        // expect not authorized error since token not set/sent in headers
         expect(statusCode).toBe(201);
 
         // expect id to be some number and name to be null since not specified in req
@@ -104,7 +102,6 @@ describe('Test Suite for chat', () => {
             .set('Authorization', 'Bearer ' + accessToken)
             .send(chat);
 
-        // expect not authorized error since token not set/sent in headers
         expect(statusCode).toBe(201);
 
         // expect id to be some number and name to be null since not specified in req
@@ -121,7 +118,7 @@ describe('Test Suite for chat', () => {
         const { statusCode } = await request(server)
             .get('/api/chat/1');
 
-        // expect not authorized error since NOT authenticated 
+        // expect not authorized error since token not set/sent in headers
         expect(statusCode).toBe(401);
 
         done();
@@ -132,7 +129,7 @@ describe('Test Suite for chat', () => {
             .get('/api/chat/1')
             .set('Authorization', 'Bearer ' + otherUserAccessToken);
 
-        // expect not authorized error since NOT member of chat 
+        // expect not authorized error since user not member of chat
         expect(statusCode).toBe(401);
 
         done();
@@ -151,19 +148,8 @@ describe('Test Suite for chat', () => {
 
         done();
     });
-
+    
     // POST /api/chat/1/message; create message in chat
-    test('POST /api/chat/:cid/message with text should respond with 400 if missing data', async (done) => {
-        const { statusCode } = await request(server)
-            .post('/api/chat/1/message')
-            .set('Authorization', 'Bearer ' + accessToken);
-
-        // expect bad request error since data/text missing
-        expect(statusCode).toBe(400);
-
-        done();
-    });
-
     test('POST /api/chat/:cid/message should respond with 401 if user NOT authenticated', async (done) => {
         const { statusCode } = await request(server)
             .post('/api/chat/1/message');
@@ -179,8 +165,19 @@ describe('Test Suite for chat', () => {
             .post('/api/chat/1/message')
             .set('Authorization', 'Bearer ' + otherUserAccessToken);
 
-        // expect not authorized error since NOT member of chat 
+        // expect not authorized error since user not member of chat
         expect(statusCode).toBe(401);
+
+        done();
+    });
+
+    test('POST /api/chat/:cid/message with text should respond with 400 if missing data', async (done) => {
+        const { statusCode } = await request(server)
+            .post('/api/chat/1/message')
+            .set('Authorization', 'Bearer ' + accessToken);
+
+        // expect bad request error since data/text missing
+        expect(statusCode).toBe(400);
 
         done();
     });
@@ -191,7 +188,7 @@ describe('Test Suite for chat', () => {
             .set('Authorization', 'Bearer ' + accessToken)
             .send({ text: 'hey' });
 
-        // expect success since authenticated and name is optional param
+        // expect success since text provided
         expect(statusCode).toBe(201);
 
         done();
@@ -203,7 +200,7 @@ describe('Test Suite for chat', () => {
             .post('/api/chat/1/2')
             .set('Authorization', 'Bearer ' + otherUserAccessToken);
 
-        // expect not authorized error since NOT member of chat 
+        // expect not authorized error since user not member of chat
         expect(statusCode).toBe(401);
 
         done();
@@ -213,7 +210,7 @@ describe('Test Suite for chat', () => {
         const { statusCode } = await request(server)
             .post('/api/chat/1/2');
 
-        // expect not authorized error since NOT authenticated 
+        // expect not authorized error since token not set/sent in headers
         expect(statusCode).toBe(401);
 
         done();
@@ -235,7 +232,6 @@ describe('Test Suite for chat', () => {
             .post('/api/chat/1/2')
             .set('Authorization', 'Bearer ' + accessToken);
 
-        // expect success since authenticated 
         expect(statusCode).toBe(201);
 
         done();
@@ -246,7 +242,7 @@ describe('Test Suite for chat', () => {
         const { statusCode } = await request(server)
             .delete('/api/chat/1/2');
 
-        // expect not authorized error since NOT authenticated 
+        // expect not authorized error since token not set/sent in headers
         expect(statusCode).toBe(401);
 
         done();
@@ -257,7 +253,6 @@ describe('Test Suite for chat', () => {
             .delete('/api/chat/1/2')
             .set('Authorization', 'Bearer ' + accessToken);
 
-        // expect success since authenticated 
         expect(statusCode).toBe(204);
 
         done();
@@ -268,7 +263,7 @@ describe('Test Suite for chat', () => {
             .delete('/api/chat/1/1')
             .set('Authorization', 'Bearer ' + otherUserAccessToken);
 
-        // expect not authorized error since NOT member of chat 
+        // expect not authorized error since user not member of chat
         expect(statusCode).toBe(401);
 
         done();

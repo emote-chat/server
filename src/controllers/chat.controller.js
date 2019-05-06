@@ -1,4 +1,3 @@
-require('dotenv').config();
 const path = require('path');
 
 const db = require(path.join(__dirname, '../db/index'));
@@ -74,7 +73,9 @@ exports.getUserChats = async (req, res, next) => {
     try {
         // get user id from req headers
         const { id: userId } = getPayload(req.headers);
-        // get chat id and name by user id 
+
+        // get chat ids and names and array of users in chats by user id
+        // i.e. info about chats that user is a member of
         const chats = await db.any(queries.findChatsByUserId, [userId]);
 
         // success; return user's chats

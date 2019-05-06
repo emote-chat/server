@@ -5,7 +5,7 @@ const db = require(path.join(__dirname, '../index'));
 const app = require(path.join(__dirname, '../../config/app'));
 const port = app.get('port');
 const mode = app.get('mode');
-const server = app.listen(port);
+let server;
 
 // init db; drop and recreate tables
 const initSchema = async (db) => {
@@ -62,18 +62,24 @@ const initUsers = async (db) => {
 (async (mode, db) => {
     try {
         if(mode !== 'development') return;
+        
+        server = app.listen(port);
+        
         await initSchema(db);
         await initUsers(db);
+        
         const sql = fs.readFileSync(
             path.join(__dirname, 'seed.sql')
         ).toString();
         await db.multi(sql);
+        
         await server.close();
         await db.$pool.end();
-        console.log('Development db seeded successfully');
+        
+        console.log('\nDEV DB SEEDED');
     }
     catch(error) {
-        console.error('Development db NOT seeded successfully');
+        console.error('\nDEV DB NOT SEEDED');
         console.error(error);
     }
 })(mode, db);

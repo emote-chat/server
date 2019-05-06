@@ -95,6 +95,8 @@ exports.getMessagesInChat = async (req, res, next) => {
         // and user info obj 
         const messages = resp.map(({ users_id, id, chats_id, text, created_at, ...userWithPw}) => {
             const { password, ...user } = userWithPw;
+            user.id = users_id; // tack on user id
+            
             return {
                 id,
                 text,

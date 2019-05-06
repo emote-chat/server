@@ -3,8 +3,16 @@ const PS = require('pg-promise').PreparedStatement;
 module.exports = {
     // users
     createUser: new PS('create-user', 
-        `INSERT INTO users(display_name, email, password, first_name, last_name) 
-        VALUES($1, $2, $3, $4, $5) 
+        `INSERT INTO users(
+            display_name, 
+            email, 
+            password, 
+            first_name, 
+            last_name
+        ) 
+        VALUES(
+            $1, $2, $3, $4, $5
+        ) 
         RETURNING id`
     ),
     findUserByEmail: new PS('find-user-by-email', 'SELECT * FROM users WHERE email = $1'),
@@ -17,14 +25,20 @@ module.exports = {
         `SELECT 
             chats_id AS id, 
             name, 
-            json_agg(json_build_object('id', users_id, 'display_name', display_name)) as users 
-        FROM users_chats 
-        INNER JOIN chats ON users_chats.chats_id=chats.id 
-        INNER JOIN users ON users_chats.users_id=users.id 
-        WHERE users_chats.chats_id IN (
-            SELECT chats_id FROM users_chats
+            json_agg(
+                json_build_object(
+                    'id', users_id, 'display_name', display_name
+                )
+            ) AS users 
+        FROM users_chats AS uc 
+        INNER JOIN chats ON uc.chats_id=chats.id 
+        INNER JOIN users ON uc.users_id=users.id 
+        WHERE uc.chats_id IN (
+            SELECT chats_id 
+            FROM users_chats
             WHERE users_id = $1
-        ) GROUP BY chats_id, chats.name`
+        ) 
+        GROUP BY chats_id, name`
     ),
     
     // users_chats

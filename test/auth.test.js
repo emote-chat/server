@@ -67,10 +67,13 @@ describe('Test Suite for auth', () => {
         done();
     });
 
-    test('POST /api/login should respond with 200', async (done) => {
-        const {display_name, ...testUser} = user;
+    test('POST /api/login should respond with 200 (case-insensitive)', async (done) => {
+        const {display_name, ...testUser} = user;        
+        // convert email prop val to uppercase; ensure case-insensitive
+        testUser.email = testUser.email.toUpperCase();
+
         const res = await request(server).post('/api/login').send(testUser);
-	
+
         // expect success
 	    expect(res.statusCode).toBe(200);
 

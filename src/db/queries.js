@@ -56,6 +56,7 @@ module.exports = {
             created_at,
             json_build_object(
                 'id', users.id, 
+                'email', users.email,
                 'display_name', users.display_name,
                 'first_name', users.first_name,
                 'last_name', users.last_name

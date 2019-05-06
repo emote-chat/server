@@ -1,7 +1,8 @@
 const path = require('path');
 const request = require('supertest');
 const app = require(path.join(__dirname, '../src/config/app'));
-const { initDb, user, invalidUser } = require(path.join(__dirname, 'helpers/db'));
+const { user, invalidUser } = require(path.join(__dirname, 'helpers/db'));
+const { initSchema } = require(path.join(__dirname, '../src/db/migrations/seed'));
 
 describe('Test Suite for auth', () => {
     
@@ -11,7 +12,7 @@ describe('Test Suite for auth', () => {
     beforeAll(async (done) => {
         server = await app.listen();
         db = require(path.join(__dirname, '../src/db/index'));
-        await initDb(db);
+        await initSchema(db);
         done();
     });
 
@@ -29,7 +30,7 @@ describe('Test Suite for auth', () => {
         done();
     });
 
-    test('POST /api/signup should respond with 200', async (done) => {
+    test('POST /api/signup should respond with 201', async (done) => {
         const res = await request(server).post('/api/signup').send(user);
 
         // expect success
@@ -66,10 +67,13 @@ describe('Test Suite for auth', () => {
         done();
     });
 
-    test('POST /api/login should respond with 200', async (done) => {
-        const {display_name, ...testUser} = user;
+    test('POST /api/login should respond with 200 (case-insensitive)', async (done) => {
+        const {display_name, ...testUser} = user;        
+        // convert email prop val to uppercase; ensure case-insensitive
+        testUser.email = testUser.email.toUpperCase();
+
         const res = await request(server).post('/api/login').send(testUser);
-	
+
         // expect success
 	    expect(res.statusCode).toBe(200);
 

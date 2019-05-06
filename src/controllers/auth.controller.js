@@ -54,15 +54,16 @@ exports.signup = async (req, res, next) => {
     }
     
     try {
+        const email = req.body.email.toLowerCase();
         const saltRounds = 12; // 2^12 iterations
         // check if user with given email already exists
         // .any is used to not throw an error if the query doesn't return any data
-        const users = await db.any(queries.findUserByEmail, [req.body.email]);
+        const users = await db.any(queries.findUserByEmail, [email]);
         if (users.length) return next('Account with that email already exists');
 
         const user = [
             req.body.display_name,
-            req.body.email,
+            email,
             await bcrypt.hash(req.body.password, saltRounds),
             req.body.first_name || null,
             req.body.last_name || null,
@@ -90,9 +91,10 @@ exports.login = async (req, res, next) => {
     }
     
     try {
+        const email = req.body.email.toLowerCase();
         // verify that user with given email already exists
         // .any is used to not throw an error if the query doesn't return any data
-        const users = await db.any(queries.findUserByEmail, [req.body.email]);
+        const users = await db.any(queries.findUserByEmail, [email]);
         const errorMessage = 'Email or password is incorrect';
         if (!users.length) return res.status(401).json({ message: errorMessage });
 

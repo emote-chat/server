@@ -6,6 +6,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const app = express();
 const jwt = require('express-jwt');
+const morgan = require('morgan');
 
 // bring in route defs
 const router = require(path.join(__dirname, '../routes/index'));
@@ -20,6 +21,18 @@ app.set('mode', process.env.NODE_ENV || 'development');
 // make sure we can properly parse the req.body
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+// use morgan for logging API requests
+if (app.get('mode') === 'production') {
+    app.use(morgan('common', { 
+        skip: function (req, res) { 
+            return res.statusCode < 400 
+        }, 
+        stream: __dirname + '/../morgan.log' 
+    }));
+} else if (app.get('mode') === 'development') {
+    app.use(morgan('dev'));
+}
 
 // serve API documentation generated via apidoc at /
 app.use(express.static(path.join(__dirname, '../../public')));

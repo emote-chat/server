@@ -22,20 +22,20 @@ app.set('mode', process.env.NODE_ENV || 'development');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+// serve API documentation generated via apidoc at /
+app.use(express.static(path.join(__dirname, '../../public')));
+
 // use morgan for logging API requests
 if (app.get('mode') === 'production') {
-    app.use(morgan('common', { 
-        skip: function (req, res) { 
-            return res.statusCode < 400 
-        }, 
-        stream: __dirname + '/../morgan.log' 
+    app.use(morgan('common', {
+        skip: function (req, res) {
+            return res.statusCode < 400
+        },
+        stream: __dirname + '/../morgan.log'
     }));
 } else if (app.get('mode') === 'development') {
     app.use(morgan('dev'));
 }
-
-// serve API documentation generated via apidoc at /
-app.use(express.static(path.join(__dirname, '../../public')));
 
 // middleware for verifying token for protected routes
 const unprotectedRoutes = ['/api/login', '/api/signup', '/'];

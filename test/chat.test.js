@@ -171,13 +171,7 @@ describe('Test Suite for chat', () => {
                     id: 1,
                     text: 'hey',
                     created_at: '2019-05-06T14:35:24.848Z',
-                    user: { 
-                            id: 1,
-                            email: 'user@gmail.com',
-                            display_name: 'manos',
-                            first_name: null,
-                            last_name: null 
-                        } 
+                    users_id: 1
                 } 
             ]
         */
@@ -185,13 +179,9 @@ describe('Test Suite for chat', () => {
             expect.arrayContaining([
                 expect.objectContaining({
                     id: 1,
+                    users_id: 1,
                     text: 'hey',
-                    created_at: expect.any(String),
-                    user: expect.objectContaining({
-                        id: 1,
-                        email,
-                        display_name
-                    })
+                    created_at: expect.any(String)
                 })
             ])
         );

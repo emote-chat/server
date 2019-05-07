@@ -1,11 +1,11 @@
 const path = require('path');
-const app = require(path.join(__dirname, 'app'));
+const app = require(path.join(__dirname, 'config/app'));
 
 app.listen(app.get('port'), () => {
-	const isModeProduction = app.get('mode') === 'production';
+    const isModeProduction = app.get('mode') === 'production';
     process.stdout.write(`Express started on ${isModeProduction ? 
-        `http://emote.ml on port ${app.get('port')}` : 
+        'http://emote.ml' : 
         `http://localhost:${app.get('port')}`}`
     );
-	process.stdout.write(`; ${isModeProduction ? '' : 'press Ctrl-C to terminate'}\n`);
+    process.stdout.write(`; ${isModeProduction ? '' : 'press Ctrl-C to terminate'}\n`);
 });

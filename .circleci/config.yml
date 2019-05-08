@@ -1,7 +1,7 @@
-version: 2
+version: 2.1
 
 jobs:
-  build:
+  test:
     docker:
       - image: circleci/node:11
 
@@ -13,22 +13,23 @@ jobs:
           POSTGRES_DB: test
           POSTGRES_PASSWORD: test123
     
-    # Set build environment vars for app config
+    # Set test environment vars for app config
     environment:
       SECRET: test
       TEST_DB_USER: emote
       TEST_DB_NAME: test
       TEST_DB_PASS: test123
     
-    working_directory: ~/server
-
     steps:
       - checkout
 
       # Use dockerize to wait for dependencies
       - run:
-          name: install dockerize
-          command: wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && sudo tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+          name: Install dockerize
+          command: >
+            wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && 
+            sudo tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && 
+            rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
           environment:
             DOCKERIZE_VERSION: v0.6.1
 
@@ -43,7 +44,9 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
-      - run: npm install
+      - run: 
+          name: Install npm modules
+          command: npm install
 
       - save_cache:
           paths:
@@ -51,5 +54,52 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       # run tests!
-      - run: npm test
+      - run: 
+          name: Run tests
+          command: npm test
 
+  build:
+    machine:
+      enabled: true
+    
+    steps:
+      - checkout
+
+      - run: 
+          name: Transfer files
+          command: rsync -avr ~/server/ $SSH_USER@$SSH_HOST:.
+
+      - run: 
+          name: Install dependencies and generate API doc
+          command: ssh $SSH_USER@$SSH_HOST "./build"
+
+  deploy:
+    machine:
+      enabled: true
+    
+    steps:
+      - checkout
+      
+      - run: 
+          name: Deploy
+          command: ssh $SSH_USER@$SSH_HOST "./deploy"
+
+workflows:
+  test-build-and-deploy:
+    jobs:
+      # run test on every branch
+      - test
+      # run build after test and only on master
+      - build:
+          requires:
+            - test
+          filters:
+            branches:
+              only: master
+      # run deployment after build and only on master
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master

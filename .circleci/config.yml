@@ -67,13 +67,7 @@ jobs:
 
       - run: 
           name: Transfer files
-          command: >
-            rsync -avr 
-            --exclude node_modules/ 
-            --exclude public/ 
-            --exclude .git/ 
-            --exclude '.*' 
-            ~/server/ $SSH_USER@$SSH_HOST:.
+          command: rsync -avr ~/server/ $SSH_USER@$SSH_HOST:.
 
       - run: 
           name: Install dependencies and generate API doc

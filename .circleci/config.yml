@@ -67,7 +67,10 @@ jobs:
 
       - run: 
           name: Transfer files
-          command: rsync -avr --exclude .git/ ./ $SSH_USER@$SSH_HOST:.
+          command: >
+            rsync -avr
+            --exclude .circleci/ --exclude '.git*' --exclude '.env.example' 
+            ./ $SSH_USER@$SSH_HOST:.
 
       - run: 
           name: Install dependencies and generate API doc

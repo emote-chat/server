@@ -54,18 +54,12 @@ describe('Test Suite for chat', () => {
         done();
     });
 
-    test('POST /api/chat with no data should respond with 201', async (done) => {
+    test('POST /api/chat with no data should respond with 400', async (done) => {
         const { statusCode, text } = await request(server)
             .post('/api/chat')
             .set('Authorization', `Bearer ${accessToken}`);
 
-        expect(statusCode).toBe(201);
-
-        // expect id to be some number and name to be null since not specified in req
-        expect(JSON.parse(text)).toEqual({
-            id: 1,
-            name: null
-        });
+        expect(statusCode).toBe(400);
 
         done();
     });
@@ -81,7 +75,7 @@ describe('Test Suite for chat', () => {
 
         // expect id to be some number and name to be null since not specified in req
         expect(JSON.parse(text)).toEqual({
-            id: 2,
+            id: 1,
             name: chat.name
         });
 

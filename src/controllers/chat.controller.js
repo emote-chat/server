@@ -20,11 +20,12 @@ const addUser = async (userId, chatId) => {
 
 exports.createChat = async (req, res, next) => {
     try {
-        // name is optional
-        const name = req.body.name || null;
+        if (!req.body.name) {
+            return next('Missing fields');
+        }
         
         // create chat; return id
-        const { id: chatId } = await db.one(queries.createChat, [name]);
+        const { id: chatId } = await db.one(queries.createChat, [req.body.name]);
         
         // get user id from auth headers
         const { id: userId } = getPayload(req.headers);

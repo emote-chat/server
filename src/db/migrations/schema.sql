@@ -20,7 +20,7 @@ CREATE TABLE users (
 -- create chats table; name attr field is optional (defaults to null)
 CREATE TABLE chats (
     id serial PRIMARY KEY,
-    name varchar(40)
+    name varchar(40) NOT NULL
 );
 
 -- create messages table with fk refs to chats & users 

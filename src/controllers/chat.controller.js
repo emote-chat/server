@@ -59,12 +59,13 @@ exports.createMessage = async (req, res, next) => {
         ];
 
         // add message to messages table
-        await db.none(queries.createMessage, message);
+        const { chats_id, ...insertedMessage } = await db.one(queries.createMessage, message);
 
         // success; return nothing
-        return res.status(201).json();
+        return res.status(201).json(insertedMessage);
     }
     catch(error) {
+        console.log(error);
         if (error) return next(error);
     }
 }

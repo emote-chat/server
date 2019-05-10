@@ -153,6 +153,12 @@ module.exports = (() => {
 	*
 	* @apiSuccessExample Success Response:
 	*     HTTP/1.1 201 Created
+	*     {
+	*          "id": 4,
+	*          "users_id": 2,
+	*          "created_at": "2019-05-04T00:31:35.880Z",
+	*          "text": "here's a message"
+	*     }
 	*
 	* @apiError UnauthorizedError Invalid/missing token in authorization header.
 	*

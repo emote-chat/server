@@ -106,7 +106,7 @@ module.exports = (() => {
 	* @apiSuccess {Object[]} - List of messages.
 	* @apiSuccess {Number} -.id Message id.
 	* @apiSuccess {Number} -.users_id User ID of user who posted message.
-	* @apiSuccess {String} -.created_at Message timestamp with timezone; defaults to current.
+	* @apiSuccess {String} -.created Message timestamp with timezone; defaults to current.
 	* @apiSuccess {String} -.text Message text.
 	*
 	* @apiSuccessExample Success Response:
@@ -115,13 +115,13 @@ module.exports = (() => {
  	*          {
 	*               "id": 4,
 	*               "users_id": 2,
-	*               "created_at": "2019-05-04T00:31:35.880Z",
+	*               "created": "2019-05-04T00:31:35.880Z",
 	*               "text": "here's a message"
 	*          },
 	*          {
 	*               "id": 2,
 	*               "users_id": 1,
-	*               "created_at": "2019-05-03T23:33:41.659Z",
+	*               "created": "2019-05-03T23:33:41.659Z",
 	*               "text": "here's another message"
 	*          }
  	*     ]
@@ -156,7 +156,7 @@ module.exports = (() => {
 	*     {
 	*          "id": 4,
 	*          "users_id": 2,
-	*          "created_at": "2019-05-04T00:31:35.880Z",
+	*          "created": "2019-05-04T00:31:35.880Z",
 	*          "text": "here's a message"
 	*     }
 	*

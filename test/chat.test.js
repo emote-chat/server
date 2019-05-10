@@ -129,14 +129,14 @@ describe('Test Suite for chat', () => {
                 id: 1,
                 users_id: 1,
                 text: 'hey',
-                created_at: '2019-05-06T14:35:24.848Z'
+                created: '2019-05-06T14:35:24.848Z'
             }
         */
         expect(JSON.parse(text)).toEqual({
             id: 1,
             users_id: 1,
             text: 'hey',
-            created_at: expect.any(String)
+            created: expect.any(String)
         });
 
         done();
@@ -179,7 +179,7 @@ describe('Test Suite for chat', () => {
                 { 
                     id: 1,
                     text: 'hey',
-                    created_at: '2019-05-06T14:35:24.848Z',
+                    created: '2019-05-06T14:35:24.848Z',
                     users_id: 1
                 } 
             ]
@@ -190,7 +190,7 @@ describe('Test Suite for chat', () => {
                     id: 1,
                     users_id: 1,
                     text: 'hey',
-                    created_at: expect.any(String)
+                    created: expect.any(String)
                 })
             ])
         );

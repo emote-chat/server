@@ -29,7 +29,7 @@ CREATE TABLE messages (
     chats_id int NOT NULL,
     users_id int NOT NULL,
     text text NOT NULL,
-    created_at timestamptz DEFAULT now(),
+    created timestamptz DEFAULT now(),
     FOREIGN KEY(chats_id) REFERENCES chats(id) ON DELETE CASCADE,
     FOREIGN KEY(users_id) REFERENCES users(id) ON DELETE SET NULL 
     -- or CASCADE (depends)

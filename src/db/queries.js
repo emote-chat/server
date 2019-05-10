@@ -53,7 +53,7 @@ module.exports = {
         `SELECT 
             messages.id,
             users_id,
-            created_at,
+            created,
             text
         FROM messages 
         WHERE chats_id = $1`

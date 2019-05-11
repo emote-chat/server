@@ -20,11 +20,12 @@ const addUser = async (userId, chatId) => {
 
 exports.createChat = async (req, res, next) => {
     try {
-        // name is optional
-        const name = req.body.name || null;
+        if (!req.body.name) {
+            return next('Missing fields');
+        }
         
         // create chat; return id
-        const { id: chatId } = await db.one(queries.createChat, [name]);
+        const { id: chatId } = await db.one(queries.createChat, [req.body.name]);
         
         // get user id from auth headers
         const { id: userId } = getPayload(req.headers);
@@ -59,12 +60,13 @@ exports.createMessage = async (req, res, next) => {
         ];
 
         // add message to messages table
-        await db.none(queries.createMessage, message);
+        const { chats_id, ...insertedMessage } = await db.one(queries.createMessage, message);
 
         // success; return nothing
-        return res.status(201).json();
+        return res.status(201).json(insertedMessage);
     }
     catch(error) {
+        console.log(error);
         if (error) return next(error);
     }
 }

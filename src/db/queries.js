@@ -48,12 +48,12 @@ module.exports = {
     findChatIdsByUserId: new PS('find-chat-ids-by-user-id', 'SELECT chats_id FROM users_chats WHERE users_id = $1'),
     
     // messages
-    createMessage: new PS('create-message', 'INSERT INTO messages(chats_id, users_id, text) VALUES($1, $2, $3)'),
+    createMessage: new PS('create-message', 'INSERT INTO messages(chats_id, users_id, text) VALUES($1, $2, $3) RETURNING *'),
     findMessagesByChatId: new PS('find-messages-by-chat-id', 
         `SELECT 
             messages.id,
             users_id,
-            created_at,
+            created,
             text
         FROM messages 
         WHERE chats_id = $1`

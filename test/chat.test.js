@@ -54,18 +54,12 @@ describe('Test Suite for chat', () => {
         done();
     });
 
-    test('POST /api/chat with no data should respond with 201', async (done) => {
+    test('POST /api/chat with no data should respond with 400', async (done) => {
         const { statusCode, text } = await request(server)
             .post('/api/chat')
             .set('Authorization', `Bearer ${accessToken}`);
 
-        expect(statusCode).toBe(201);
-
-        // expect id to be some number and name to be null since not specified in req
-        expect(JSON.parse(text)).toEqual({
-            id: 1,
-            name: null
-        });
+        expect(statusCode).toBe(400);
 
         done();
     });
@@ -81,7 +75,7 @@ describe('Test Suite for chat', () => {
 
         // expect id to be some number and name to be null since not specified in req
         expect(JSON.parse(text)).toEqual({
-            id: 2,
+            id: 1,
             name: chat.name
         });
 
@@ -122,13 +116,28 @@ describe('Test Suite for chat', () => {
     });
 
     test('POST /api/chat/:cid/message with text should respond with 201', async (done) => {
-        const { statusCode } = await request(server)
+        const { statusCode, text } = await request(server)
             .post('/api/chat/1/message')
             .set('Authorization', `Bearer ${accessToken}`)
             .send({ text: 'hey' });
 
         // expect success since text provided
         expect(statusCode).toBe(201);
+
+        /* expect format:
+            {
+                id: 1,
+                users_id: 1,
+                text: 'hey',
+                created: '2019-05-06T14:35:24.848Z'
+            }
+        */
+        expect(JSON.parse(text)).toEqual({
+            id: 1,
+            users_id: 1,
+            text: 'hey',
+            created: expect.any(String)
+        });
 
         done();
     });
@@ -170,7 +179,7 @@ describe('Test Suite for chat', () => {
                 { 
                     id: 1,
                     text: 'hey',
-                    created_at: '2019-05-06T14:35:24.848Z',
+                    created: '2019-05-06T14:35:24.848Z',
                     users_id: 1
                 } 
             ]
@@ -181,7 +190,7 @@ describe('Test Suite for chat', () => {
                     id: 1,
                     users_id: 1,
                     text: 'hey',
-                    created_at: expect.any(String)
+                    created: expect.any(String)
                 })
             ])
         );

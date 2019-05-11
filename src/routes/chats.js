@@ -82,6 +82,14 @@ module.exports = (() => {
 	*          "name": "Chat name"
 	*     }
 	*
+	* @apiError MissingFields Missing one or more of required fields <code>email</code>, <code>password</code> and/or <code>display_name</code>.
+	*
+	* @apiErrorExample MissingFields Error Response:
+	*     HTTP/1.1 400 Bad Request
+	*     {
+	*          "message": "Missing fields"
+	*     }
+	*
 	* @apiError UnauthorizedError Invalid/missing token in authorization header.
 	*
 	* @apiErrorExample UnAuthorizedError Response:
@@ -158,6 +166,14 @@ module.exports = (() => {
 	*          "users_id": 2,
 	*          "created": "2019-05-04T00:31:35.880Z",
 	*          "text": "here's a message"
+	*     }
+	*
+	* @apiError MissingFields Missing one or more of required fields <code>email</code>, <code>password</code> and/or <code>display_name</code>.
+	*
+	* @apiErrorExample MissingFields Error Response:
+	*     HTTP/1.1 400 Bad Request
+	*     {
+	*          "message": "Missing fields"
 	*     }
 	*
 	* @apiError UnauthorizedError Invalid/missing token in authorization header.

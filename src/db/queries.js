@@ -58,4 +58,5 @@ module.exports = {
         FROM messages 
         WHERE chats_id = $1`
     ),
+    addReaction: new PS('add-reaction', 'INSERT INTO users_messages_emojis(messages_id, users_id, emoji) VALUES($1, $2, $3) RETURNING *'),
 }

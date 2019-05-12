@@ -5,13 +5,13 @@ module.exports = (() => {
 	const messageController = require(path.join(__dirname, '../controllers/message.controller'));
 
     /**
-    * @api {post} /:mid/react Add Reaction
+    * @api {post} /:mid/add-reaction Add Reaction
     * @apiName AddReaction
     * @apiGroup Message
     *
     * @apiHeader {String} token Authorization Bearer Token.
     * @apiHeader {Number} id User id.
-    * @apiParam (Request body) {String} [:mid] Message's id.
+    * @apiParam {String} :mid Message's id.
     *
     * @apiSuccess (Success 201) {Number} id Message ID.
     * @apiSuccess (Success 201) {Number} id User ID.
@@ -41,7 +41,7 @@ module.exports = (() => {
     *          "message": "Invalid/missing token"
     *     }
     */
-	router.post('/:mid/react', messageController.addReaction);
+	router.post('/:mid/add-reaction', messageController.addReaction);
 
 	// ... and other possible routes like updating/removing message and removing reaction (tbd)
 	

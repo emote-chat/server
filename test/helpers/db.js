@@ -18,3 +18,18 @@ exports.invalidUser = {
     email: 'user@yahoo.com',
     password: 'yahoo'
 }
+
+exports.chatData = { name: 'my chat' };
+
+exports.messageData = {
+    "id": 1,
+    "users_id": 1,
+    "created": "2019-05-04T00:31:35.880Z",
+    "text": "here's a message"
+}
+
+exports.reactionData = {
+    messages_id: 1,
+    users_id: 1,
+    emoji: '😄'
+}

@@ -20,11 +20,12 @@ const addUser = async (userId, chatId) => {
 
 exports.createChat = async (req, res, next) => {
     try {
-        // name is optional
-        const name = req.body.name || null;
+        if (!req.body.name) {
+            return next('Missing fields');
+        }
         
         // create chat; return id
-        const { id: chatId } = await db.one(queries.createChat, [name]);
+        const { id: chatId } = await db.one(queries.createChat, [req.body.name]);
         
         // get user id from auth headers
         const { id: userId } = getPayload(req.headers);
@@ -59,12 +60,13 @@ exports.createMessage = async (req, res, next) => {
         ];
 
         // add message to messages table
-        await db.none(queries.createMessage, message);
+        const { chats_id, ...insertedMessage } = await db.one(queries.createMessage, message);
 
         // success; return nothing
-        return res.status(201).json();
+        return res.status(201).json(insertedMessage);
     }
     catch(error) {
+        console.log(error);
         if (error) return next(error);
     }
 }
@@ -89,19 +91,7 @@ exports.getUserChats = async (req, res, next) => {
 exports.getMessagesInChat = async (req, res, next) => {
     try {
         // get messages by chat id inc user info
-        const resp = await db.any(queries.findMessagesByChatId, [req.params.cid]);
-
-        // shape returned data with message id, text, created_at
-        // and user info obj 
-        const messages = resp.map(({ users_id, id, chats_id, text, created_at, ...userWithPw}) => {
-            const { password, ...user } = userWithPw;
-            return {
-                id,
-                text,
-                created_at,
-                user
-            };
-        });
+        const messages = await db.any(queries.findMessagesByChatId, [req.params.cid]);
 
         // success; return array of messages
         return res.status(200).json(messages);

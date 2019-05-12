@@ -20,7 +20,7 @@ CREATE TABLE users (
 -- create chats table; name attr field is optional (defaults to null)
 CREATE TABLE chats (
     id serial PRIMARY KEY,
-    name varchar(40)
+    name varchar(40) NOT NULL
 );
 
 -- create messages table with fk refs to chats & users 
@@ -29,7 +29,7 @@ CREATE TABLE messages (
     chats_id int NOT NULL,
     users_id int NOT NULL,
     text text NOT NULL,
-    created_at timestamptz DEFAULT now(),
+    created timestamptz DEFAULT now(),
     FOREIGN KEY(chats_id) REFERENCES chats(id) ON DELETE CASCADE,
     FOREIGN KEY(users_id) REFERENCES users(id) ON DELETE SET NULL 
     -- or CASCADE (depends)

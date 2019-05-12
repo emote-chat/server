@@ -82,6 +82,14 @@ module.exports = (() => {
 	*          "name": "Chat name"
 	*     }
 	*
+	* @apiError MissingFields Missing one or more of required fields <code>email</code>, <code>password</code> and/or <code>display_name</code>.
+	*
+	* @apiErrorExample MissingFields Error Response:
+	*     HTTP/1.1 400 Bad Request
+	*     {
+	*          "message": "Missing fields"
+	*     }
+	*
 	* @apiError UnauthorizedError Invalid/missing token in authorization header.
 	*
 	* @apiErrorExample UnAuthorizedError Response:
@@ -105,39 +113,24 @@ module.exports = (() => {
 	*
 	* @apiSuccess {Object[]} - List of messages.
 	* @apiSuccess {Number} -.id Message id.
+	* @apiSuccess {Number} -.users_id User ID of user who posted message.
+	* @apiSuccess {String} -.created Message timestamp with timezone; defaults to current.
 	* @apiSuccess {String} -.text Message text.
-	* @apiSuccess {Object} -.user User information.
- 	* @apiSuccess {Number} -.user.id User ID.
- 	* @apiSuccess {String} -.user.display_name User display name.
- 	* @apiSuccess {String} -.user.first_name User first name.
- 	* @apiSuccess {String} -.user.last_name User last name.
 	*
 	* @apiSuccessExample Success Response:
 	*     HTTP/1.1 200 OK
 	*     [
  	*          {
 	*               "id": 4,
-	*               "text": "here's a message",
-	*               "created_at": "2019-05-04T00:31:35.880Z",
-	*               "user": {
-	*                    "id": 2,
-	*                    "email": "test123@yahoo.com",
-	*                    "display_name": "bob",
-	*                    "first_name": "bob",
-	*                    "last_name": "bob"
-	*               }
+	*               "users_id": 2,
+	*               "created": "2019-05-04T00:31:35.880Z",
+	*               "text": "here's a message"
 	*          },
 	*          {
 	*               "id": 2,
-	*               "text": "here's another message",
-	*               "created_at": "2019-05-03T23:33:41.659Z",
-	*               "user": {
-	*                    "id": 1,
-	*                    "email": "test123@gmail.com",
-	*                    "display_name": "manos",
-	*                    "first_name": null,
-	*                    "last_name": null
-	*               }
+	*               "users_id": 1,
+	*               "created": "2019-05-03T23:33:41.659Z",
+	*               "text": "here's another message"
 	*          }
  	*     ]
 	*
@@ -168,6 +161,20 @@ module.exports = (() => {
 	*
 	* @apiSuccessExample Success Response:
 	*     HTTP/1.1 201 Created
+	*     {
+	*          "id": 4,
+	*          "users_id": 2,
+	*          "created": "2019-05-04T00:31:35.880Z",
+	*          "text": "here's a message"
+	*     }
+	*
+	* @apiError MissingFields Missing one or more of required fields <code>email</code>, <code>password</code> and/or <code>display_name</code>.
+	*
+	* @apiErrorExample MissingFields Error Response:
+	*     HTTP/1.1 400 Bad Request
+	*     {
+	*          "message": "Missing fields"
+	*     }
 	*
 	* @apiError UnauthorizedError Invalid/missing token in authorization header.
 	*

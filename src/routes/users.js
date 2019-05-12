@@ -9,6 +9,8 @@ module.exports = (() => {
 	* @apiName GetUserIdByEmail
 	* @apiGroup User
 	*
+	* @apiParam {String} email User email.
+	*
 	* @apiHeader {String} token Authorization Bearer Token.
 	*
 	* @apiSuccess {Number} id User ID.

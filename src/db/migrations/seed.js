@@ -61,7 +61,7 @@ const initUsers = async (db) => {
 // init dev data by initializing users and rest of seed data
 (async (mode, db) => {
     try {
-        if(mode !== 'development') return;
+        if (mode !== 'development') return;
         
         server = app.listen(port);
         

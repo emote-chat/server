@@ -51,6 +51,5 @@ CREATE TABLE users_messages_emojis (
     messages_id int NOT NULL,
     emoji varchar(100) NOT NULL, 
     FOREIGN KEY(users_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY(messages_id) REFERENCES messages(id) ON DELETE CASCADE,
-    PRIMARY KEY(users_id, messages_id, emoji)
+    FOREIGN KEY(messages_id) REFERENCES messages(id) ON DELETE CASCADE
 );

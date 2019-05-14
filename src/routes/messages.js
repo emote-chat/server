@@ -1,11 +1,47 @@
 module.exports = (() => {
 	const express = require('express');
 	const router = express.Router();
-	// const path = require('path');
-	// const messageController = require(path.join(__dirname, '../controllers/message.controller'));
+	const path = require('path');
+	const messageController = require(path.join(__dirname, '../controllers/message.controller'));
 
-	// API endpoint to add user reaction to message in users_messages_emojis table
-	// router.post('/:mid/react', messageController.addReaction);
+    /**
+    * @api {post} /:mid/add-reaction Add Reaction
+    * @apiName AddReaction
+    * @apiGroup Message
+    *
+    * @apiHeader {String} token Authorization Bearer Token.
+    * @apiHeader {Number} id User id.
+    * @apiParam {String} :mid Message's id.
+    *
+    * @apiSuccess (Success 201) {Number} id Message ID.
+    * @apiSuccess (Success 201) {Number} id User ID.
+    * @apiSuccess (Success 201) {String} emoji Emoji.
+    *
+    * @apiSuccessExample Success Response:
+    *     HTTP/1.1 201 Created
+    *     {
+    *          "users_id": 1,
+    *          "messages_id": 1,
+    *          "emoji": "😄"
+    *     }
+    *
+    * @apiError MissingFields Missing one or more of required fields <code>emoji</code>.
+    *
+    * @apiErrorExample MissingFields Error Response:
+    *     HTTP/1.1 400 Bad Request
+    *     {
+    *          "message": "Missing fields"
+    *     }
+    *
+    * @apiError UnauthorizedError Invalid/missing token in authorization header.
+    *
+    * @apiErrorExample UnAuthorizedError Response:
+    *     HTTP/1.1 401 Unauthorized
+    *     {
+    *          "message": "Invalid/missing token"
+    *     }
+    */
+	router.post('/:mid/add-reaction', messageController.addReaction);
 
 	// ... and other possible routes like updating/removing message and removing reaction (tbd)
 	

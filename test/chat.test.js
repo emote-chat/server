@@ -104,6 +104,17 @@ describe('Test Suite for chat', () => {
         done();
     });
 
+    test('POST /api/chat/:cid/message should respond with 404 if chat does NOT exist', async (done) => {
+        const { statusCode } = await request(server)
+            .post('/api/chat/2/message')
+            .set('Authorization', `Bearer ${accessToken}`);
+
+        // expect not found since chat id invalid (chat does not exist)
+        expect(statusCode).toBe(404);
+
+        done();
+    });
+
     test('POST /api/chat/:cid/message with text should respond with 400 if missing data', async (done) => {
         const { statusCode } = await request(server)
             .post('/api/chat/1/message')
@@ -160,6 +171,17 @@ describe('Test Suite for chat', () => {
 
         // expect not authorized error since user not member of chat
         expect(statusCode).toBe(401);
+
+        done();
+    });
+
+    test('GET /api/chat/:cid should respond with 404 if chat does NOT exist', async (done) => {
+        const { statusCode } = await request(server)
+            .get('/api/chat/2')
+            .set('Authorization', `Bearer ${accessToken}`);
+
+        // expect not found since chat id invalid (chat does not exist)
+        expect(statusCode).toBe(404);
 
         done();
     });
@@ -227,6 +249,17 @@ describe('Test Suite for chat', () => {
 
         // expect bad request error since attempting to double-add user
         expect(statusCode).toBe(400);
+
+        done();
+    });
+
+    test('POST /api/chat/:cid/:uid should respond with 404 if chat does NOT exist', async (done) => {
+        const { statusCode } = await request(server)
+            .post('/api/chat/2/1')
+            .set('Authorization', `Bearer ${accessToken}`);
+
+        // expect not found since chat id invalid (chat does not exist)
+        expect(statusCode).toBe(404);
 
         done();
     });
@@ -327,6 +360,17 @@ describe('Test Suite for chat', () => {
 
         // expect not authorized error since user not member of chat
         expect(statusCode).toBe(401);
+
+        done();
+    });
+
+    test('DELETE /api/chat/:cid/:uid should respond with 404 if chat does NOT exist', async (done) => {
+        const { statusCode } = await request(server)
+            .post('/api/chat/2/1')
+            .set('Authorization', `Bearer ${accessToken}`);
+
+        // expect not found since chat id invalid (chat does not exist)
+        expect(statusCode).toBe(404);
 
         done();
     });

@@ -49,7 +49,7 @@ conda activate emote
 ```
 
 ### Get More Tweets
-* To use twitter stream (live tweets; *note that you must have 2-factor authentication temporarily turned off* as the script uses your username and password to authenticate you along with your app key and secret to acquire the proper oauth v1.0 (v2.0 is not available for streams) credentials):
+* To use twitter stream (live tweets; *note that you must have [Twitter login verification](https://twitter.com/settings/account) (2-factor authentication) temporarily turned off* as the script uses your username and password to authenticate you along with your app key and secret to acquire the proper oauth v1.0 credentials &mdash; v2.0 is not available for streams):
 
 ```sh
 python nlp/twitter.py

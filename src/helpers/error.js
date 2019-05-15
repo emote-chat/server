@@ -20,6 +20,12 @@ module.exports = (err, req, res, next) => {
         });
     }
 
+    if (err.name === 'ChatOrMessageNotFound') {
+        return res.status(404).json({
+            message: 'Given chat or message not found'
+        });
+    }   
+
     // server error; 500 
     return res.status(500).send({ 
         message: err.message 

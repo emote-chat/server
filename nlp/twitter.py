@@ -2,106 +2,34 @@ import os
 import re
 import pickle
 import signal
-from twython import Twython
-from twython import TwythonStreamer
+from twython import Twython, TwythonStreamer, exceptions
+from argparse import ArgumentParser
+from pathlib import Path
 
-emoji_dict = dict()
+# used in order to open twitter stream automatically
+import urllib
+from selenium import webdriver
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as ec
+from selenium.webdriver.chrome.options import Options
 
-# Twitter Setup
-TWITTER_KEY = os.environ.get('TWITTER_KEY')
-TWITTER_SECRET = os.environ.get('TWITTER_SECRET')
+import constants
 
-'''
-Define emoji unicode here
-Examples:
-1F602 = happy, 1F62D = sad, 1F621= angry, 2764 = love, 1F61C = playful, 1F631 = confused
-'''
-EMOJIS = [u'\U0001F621']
+EMOJIS = ['😡']
+emoji_dict = dict()  # needs to be able to modified by both classes
 
-class MyStreamer(TwythonStreamer):
-    def on_success(self, data):
-        if 'text' in data:
-            cleanTweet(data['text'])
 
-    def on_error(self, status_code, data):
-        print(status_code)
-        self.disconnect()
-
-'''
-PART 1: AUTHENTICATING
-Run the script, go to the auth url and verify.
-'''
-def twitterAuth():
-    twitter = Twython(TWITTER_KEY, TWITTER_SECRET)
-    auth = twitter.get_authentication_tokens()
-
-    OAUTH_TOKEN = auth['oauth_token']
-    OAUTH_TOKEN_SECRET = auth['oauth_token_secret']
-
-    print(OAUTH_TOKEN)
-    print(OAUTH_TOKEN_SECRET)
-    print(auth['auth_url'])
-
-'''
-PART 2: GETTING CREDENTIALS
-Enter keys from PART 1 below (OAUTH_VERIFIER comes from the redirect URL hash)
-'''
-def twitterCred():
-    OAUTH_TOKEN = ''
-    OAUTH_TOKEN_SECRET = ''
-    OAUTH_VERIFIER = ''
-    twitter = Twython(TWITTER_KEY, TWITTER_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
-    final_step = twitter.get_authorized_tokens(OAUTH_VERIFIER)
-    print(final_step)
-    os.environ['OAUTH_TOKEN'] = final_step['oauth_token']
-    os.environ['OAUTH_TOKEN_SECRET'] = final_step['oauth_token_secret']
-
-'''
-PART 3: USE CREDENTIALS TO OPEN STREAM
-'''
-def openStream():
-    OAUTH_TOKEN = os.environ.get('OAUTH_TOKEN')
-    OAUTH_TOKEN_SECRET = os.environ.get('OAUTH_TOKEN_SECRET')
-
-    QUERY = '&'.join(EMOJIS[0]) # I think we can only open one stream at a time
-
-    stream = MyStreamer(TWITTER_KEY, TWITTER_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
-    stream.statuses.filter(track=QUERY, language='en')
-
-'''
-Use this function to connect to Twitter Stream API.
-'''
-def connectTwitterStream():
-    # When first authenticating, comment in these steps one at a time
-    # twitterAuth()
-    # twitterCred()
-    openStream()
-
-'''
-Use this function to connect to Twitter Search API.
-Simpler as it doesn't require oauth,
-but the tweets are limited to 100 at a time.
-'''
-def connectTwitterSearch():
-    twitter = Twython(TWITTER_KEY, TWITTER_SECRET, oauth_version=2)
-    TWITTER_ACCESS_TOKEN = twitter.obtain_access_token()
-
-    twitter = Twython(TWITTER_KEY, access_token=TWITTER_ACCESS_TOKEN)
-
-    for emoji in EMOJIS:
-        QUERY = '&'.join(emoji)
-        RESULTS = twitter.search(q=QUERY, count=100, result_type='mixed', lang='en')
-
-        for tweet in RESULTS['statuses']:
-            cleanTweet(tweet['text'])
-
-'''
-Cleans raw tweets and prepares for proper storage
-'''
-def cleanTweet(tweet):
+def clean_tweet(tweet):
+    """Cleans raw tweets and prepares for proper storage"""
     global emoji_dict
+
     # Don't use tweet if retweet or has URL
-    if (('RT' not in tweet) and ('http://' not in tweet) and ('https://' not in tweet)):
+    if (
+        'RT' not in tweet and
+        'http://' not in tweet and
+        'https://' not in tweet
+    ):
+
         # Convert emojis to code
         tweet = tweet.encode('unicode-escape').decode('ASCII')
 
@@ -118,32 +46,205 @@ def cleanTweet(tweet):
         except KeyError:
             emoji_dict[EMOJIS[0]] = [tweet]
 
-'''
-Main function
-'''
-def main():
-    if os.path.getsize('tweets') > 0:
-        inputFile = open('tweets', 'rb')
+
+class TwitterDataCollection:
+    # Twitter Setup
+    TWITTER_KEY = constants.TWITTER_KEY
+    TWITTER_SECRET = constants.TWITTER_SECRET
+
+
+    class MyStreamer(TwythonStreamer):
+        """UPDATE WITH ONE-LINE DESCRIPTION."""
+
+        def on_success(self, data):
+            if 'text' in data:
+                clean_tweet(data.get('text'))
+
+        def on_error(self, status_code, data):
+            print(status_code)
+            self.disconnect()
+
+    def twitter_auth(self):
+        """PART 1: AUTHENTICATING
+
+        Run the script, go to the auth url and verify.
+        """
+        twitter = Twython(self.TWITTER_KEY, self.TWITTER_SECRET)
+        auth = twitter.get_authentication_tokens()
+
+        self.OAUTH_TOKEN = auth['oauth_token']
+        self.OAUTH_TOKEN_SECRET = auth['oauth_token_secret']
+
+        print(f'OAUTH_TOKEN: {self.OAUTH_TOKEN}')
+        print(f'OAUTH_TOKEN_SECRET: {self.OAUTH_TOKEN_SECRET}')
+
+        print(auth.get('auth_url'))
+
+
+        if (Path('nlp/chromedriver')).is_file():
+            exec_loc = 'nlp/chromedriver'
+        else:
+            exec_loc = 'chromedriver'
+
+        options = Options()
+        options.headless = True
+        driver = webdriver.Chrome(exec_loc, options=options)
+
+        driver.get(auth['auth_url'])
+        form = driver.find_element_by_id('oauth_form')
+        input_email = driver.find_element_by_id('username_or_email')
+        input_password = driver.find_element_by_id('password')
+        input_email.send_keys(constants.TWITTER_USER)
+        input_password.send_keys(constants.TWITTER_PASS)
+
+        current_url = driver.current_url
+
+        form.submit()
+
+        # wait for URL to change with 15 seconds timeout
+        WebDriverWait(driver, 15).until(ec.url_changes(current_url))
+
+        self.twitter_cred(driver.current_url)
+
+
+    def twitter_cred(self, url):
+        """PART 2: GETTING CREDENTIALS
+
+        Enter keys from PART 1.
+
+        Note: OAUTH_VERIFIER comes from the redirect URL hash.
+        """
+        # extract oauth verifier from redirect url
+        self.OAUTH_VERIFIER = url[
+            url.find('oauth_verifier') + 15:url.find('#')
+        ]
+
+        twitter = Twython(
+            self.TWITTER_KEY,
+            self.TWITTER_SECRET,
+            self.OAUTH_TOKEN,
+            self.OAUTH_TOKEN_SECRET
+        )
+
+        final_step = twitter.get_authorized_tokens(self.OAUTH_VERIFIER)
+
+        self.OAUTH_TOKEN = final_step['oauth_token']
+        self.OAUTH_TOKEN_SECRET = final_step['oauth_token_secret']
+
+        print(f'OAUTH_VERIFIER: {self.OAUTH_VERIFIER}')
+        print(f'OAUTH_TOKEN: {self.OAUTH_TOKEN}')
+        print(f'OAUTH_TOKEN_SECRET: {self.OAUTH_TOKEN_SECRET}')
+
+
+    def open_stream(self):
+        """PART 3: USE CREDENTIALS TO OPEN STREAM"""
+        # I think we can only open one stream at a time
+        QUERY = '&'.join(EMOJIS[0])
+
+        stream = self.MyStreamer(
+            self.TWITTER_KEY,
+            self.TWITTER_SECRET,
+            self.OAUTH_TOKEN,
+            self.OAUTH_TOKEN_SECRET
+        )
+
+        stream.statuses.filter(track=QUERY, language='en')
+
+
+    def connect_twitter_stream(self):
+        """Connects to Twitter Stream API."""
+        # set up authentication using oauth v1.0
+        self.twitter_auth()
+        # open stream (tweets in real-time)
+        self.open_stream()
+
+
+    def connect_twitter_search(self):
+        """Connects to Twitter Search API.
+
+        Simpler as it doesn't require oauth.
+        NOTE: tweets are limited to 100 at a time.
+        """
+        twitter = Twython(
+            self.TWITTER_KEY,
+            self.TWITTER_SECRET,
+            oauth_version=2
+        )
+        TWITTER_ACCESS_TOKEN = twitter.obtain_access_token()
+
+        twitter = Twython(self.TWITTER_KEY, access_token=TWITTER_ACCESS_TOKEN)
+
+        for emoji in EMOJIS:
+            QUERY = '&'.join(emoji)
+            RESULTS = twitter.search(
+                q=QUERY,
+                count=100,
+                result_type='mixed',
+                lang='en'
+            )
+
+            for tweet in RESULTS['statuses']:
+                clean_tweet(tweet['text'])
+
+
+    def __init__(self, use_search):
+        """Load pickle file if it exists and open stream or search."""
         global emoji_dict
-        emoji_dict = pickle.load(inputFile)
-        inputFile.close()
 
-    # Choose whether to use the stream or search Twitter API
-    connectTwitterStream()
-    # connectTwitterSearch()
+        signal.signal(signal.SIGINT, self.sig_int_handler)
 
-def keyboardInterruptHandler(signal, frame):
-    global emoji_dict
-    print('KeyboardInterrupt'.format(signal))
+        if (Path('nlp/tweets')).is_file():
+            filename = 'nlp/tweets'
+        else:
+            filename = 'tweets'
 
-    # When done streaming, open the output file and dump emoji_dict into it
-    outputFile = open('tweets', 'wb+')
-    pickle.dump(emoji_dict, outputFile)
+        if os.path.getsize(filename) > 0:
+            in_file = open(filename, 'rb')
+            emoji_dict = pickle.load(in_file)
+            in_file.close()
 
-    outputFile.close()
+        try:
+            if use_search:
+                self.connect_twitter_search()
+            else:
+                self.connect_twitter_stream()
 
-    exit(0)
+        except (
+            exceptions.TwythonAuthError,
+            exceptions.TwythonError,
+            ValueError
+        ) as error:
+            print(error)
+            print('Missing TWITTER_KEY and TWITTER_SECRET env vars')
 
-signal.signal(signal.SIGINT, keyboardInterruptHandler)
 
-main()
+    def sig_int_handler(self, sig, frame):
+        """Handles SIGINT, writing to pickle with all retrieved data."""
+        global emoji_dict
+
+        print(f'Terminated by {signal.SIGINT.name}.')
+
+        filename = 'tweets' if 'nlp' in os.getcwd() else 'nlp/tweets'
+
+        # When done streaming, open the output file and dump emoji_dict into it
+        with open(filename, 'wb') as f:
+            pickle.dump(emoji_dict, f)
+        f.close()
+
+        print(emoji_dict[EMOJIS[0]])
+
+        exit(0)
+
+
+# Execute main method upon running script
+if __name__ == '__main__':
+    # designate an optional -se or --search flag if twitter search
+    # instead of twitter stream desired
+    parser = ArgumentParser()
+    parser.add_argument(
+        '-se', '--search',
+        action='store_true',
+        help='use twitter search in lieu of twitter stream'
+    )
+
+    TwitterDataCollection(parser.parse_args().search)

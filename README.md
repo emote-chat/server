@@ -13,13 +13,13 @@
 ## Local Database Setup for UNIX-based Systems
 <!-- remove next two steps later because we'll want to seed the database as part of running the server locally in 'development' mode -->
 
-1. Install [PostgreSQL](https://www.postgresql.org/download/) **major version 11** 
+1. Install [PostgreSQL](https://www.postgresql.org/download/) **major version 11**. We recommend using [homebrew](https://brew.sh/).
 1. Switch to the postgres UNIX account: `sudo -i -u postgres`
 1. Create a username and password (replace `username` with desired username): `createuser username --pwprompt`
 1. Enter password to be used for the user you just created
 1. To create a database (replace `database` with desired database name): `createdb database`
 1. To exit the postgres UNIX account: `exit`
-1. Create a file named `.env` at the root of the project with the variables in `.env.example` and replace with the host, user, user password and database information for the databases you'll be using for development and testing respectively. `DEV_DB_HOST` and `TEST_DB_HOST` default to `localhost` so you don't have to include those variables if you plan to use `localhost`. It is suggested that you specify separate tables for `DEV_DB_NAME` and `TEST_DB_NAME` since the test suites will wipe the test database clean before running the tests. Please note that production database information is only accessible to the project owners.
+1. Create a file named `.env` at the root of the project with the variables in `.env.example` and replace with the host, user, user password and database information for the databases you'll be using for development and testing respectively. `DEV_DB_HOST` and `TEST_DB_HOST` default to `localhost` so you don't have to include those variables if you plan to use `localhost`. It is suggested that you specify separate tables for `DEV_DB_NAME` and `TEST_DB_NAME` since the test suites will wipe the test database clean before running each test suite. *Please note that production database information is only accessible to the project owners.*
 
 ## Locally Run Server
 
@@ -38,10 +38,11 @@ npm test
 
 ### NLP Installation
 
-Make sure to add the `TWITTER_KEY` and `TWITTER_SECRET` as environment variables.
+1. Don't forget to define `TWITTER_USER`, `TWITTER_PASS`, `TWITTER_KEY` and `TWITTER_SECRET` in your `.env` file. *Refer to the `.env.example` to be sure you define the necessary environment variables.*
+1. Update and activate the Anaconda virtual env:
 
 ```
-conda env update -f env.yml --prune
+conda env update -f nlp/env.yml --prune
 conda activate emote
 ```
 
@@ -78,8 +79,8 @@ npm test
 ## Meta
 
 * Sonam Kindy – [@sonamdkindy](https://github.com/sonamdkindy)
-* Eric Newton – [@ernewtoner](https://github.com/ernewtoner)
 * Michele Larson – [@mnicole](https://github.com/mnicole)
+* Eric Newton – [@ernewtoner](https://github.com/ernewtoner)
 
 Distributed under the Apache v2.0 license. See the [LICENSE](LICENSE) file for more information.
 

@@ -144,6 +144,14 @@ module.exports = (() => {
 	*
 	* @apiError MembershipError Not a member of the chat.
 	*
+    * @apiError ChatOrMessageNotFound Given chat does not exist.
+    *
+    * @apiErrorExample ChatOrMessageNotFound Response:
+    *     HTTP/1.1 404 Not Found
+    *     {
+    *          "message": "Given chat or message not found"
+    *     }
+	*
 	* @apiErrorExample MembershipError Response:
 	*     HTTP/1.1 401 Unauthorized
 	*     {
@@ -184,6 +192,14 @@ module.exports = (() => {
 	*          "message": "Invalid/missing token"
 	*     }
 	*
+    * @apiError ChatOrMessageNotFound Given chat does not exist.
+    *
+    * @apiErrorExample ChatOrMessageNotFound Response:
+    *     HTTP/1.1 404 Not Found
+    *     {
+    *          "message": "Given chat or message not found"
+    *     }
+	* 
 	* @apiError MembershipError Not a member of the chat.
 	*
 	* @apiErrorExample MembershipError Response:
@@ -212,6 +228,14 @@ module.exports = (() => {
 	*     {
 	*          "message": "Invalid/missing token"
 	*     }
+	*
+    * @apiError ChatOrMessageNotFound Given chat does not exist.
+    *
+    * @apiErrorExample ChatOrMessageNotFound Response:
+    *     HTTP/1.1 404 Not Found
+    *     {
+    *          "message": "Given chat or message not found"
+    *     }
 	*
 	* @apiError MembershipError User making request is not a member of the chat.
 	*
@@ -249,6 +273,14 @@ module.exports = (() => {
 	*     {
 	*          "message": "Invalid/missing token"
 	*     }
+	*
+    * @apiError ChatOrMessageNotFound Given chat does not exist.
+    *
+    * @apiErrorExample ChatOrMessageNotFound Response:
+    *     HTTP/1.1 404 Not Found
+    *     {
+    *          "message": "Given chat or message not found"
+    *     }
 	*
 	* @apiError MembershipError Not a member of the chat.
 	*

@@ -214,7 +214,10 @@ class TwitterDataCollection:
 
 
 class MyStreamer(TwythonStreamer):
-        """UPDATE WITH ONE-LINE DESCRIPTION."""
+        """Class necessary for setting up stream.
+
+        See: https://twython.readthedocs.io/en/latest/usage/streaming_api.html
+        """
 
         def on_success(self, data):
             if 'text' in data:

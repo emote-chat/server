@@ -1,9 +1,10 @@
-const PS = require('pg-promise').PreparedStatement;
+const PS = require("pg-promise").PreparedStatement;
 
 module.exports = {
-    // users
-    createUser: new PS('create-user', 
-        `INSERT INTO users(
+  // users
+  createUser: new PS(
+    "create-user",
+    `INSERT INTO users(
             display_name, 
             email, 
             password, 
@@ -50,13 +51,22 @@ module.exports = {
     // messages
     createMessage: new PS('create-message', 'INSERT INTO messages(chats_id, users_id, text) VALUES($1, $2, $3) RETURNING *'),
     findMessagesByChatId: new PS('find-messages-by-chat-id', 
-        `SELECT 
-            messages.id,
-            users_id,
-            created,
-            text
-        FROM messages 
-        WHERE chats_id = $1`
+        `SELECT
+            m.id,
+            m.chats_id,
+            m.users_id,
+            m.text,
+            m.created,
+            json_agg(
+                json_build_object(
+                    'users_id', users_messages_emojis.users_id,
+                    'emoji', users_messages_emojis.emoji
+                )
+            ) AS reactions
+        FROM messages AS m
+        LEFT OUTER JOIN users_messages_emojis ON users_messages_emojis.messages_id=m.id
+        WHERE chats_id = $1
+        GROUP BY m.id`
     ),
     addReaction: new PS('add-reaction', 'INSERT INTO users_messages_emojis(messages_id, users_id, emoji) VALUES($1, $2, $3) RETURNING *'),
 }

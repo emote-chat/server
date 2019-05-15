@@ -38,7 +38,7 @@ npm test
 
 ### NLP Installation
 
-1. Add `TWITTER_KEY` and `TWITTER_SECRET` to your environment variables.
+1. Don't forget to define `TWITTER_USER`, `TWITTER_PASS`, `TWITTER_KEY` and `TWITTER_SECRET` in your `.env` file. *Refer to the `.env.example` to be sure you define the necessary environment variables.*
 1. Update and activate the Anaconda virtual env:
 
 ```

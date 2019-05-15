@@ -54,7 +54,7 @@ module.exports = (() => {
     *          "message": "Given chat or message not found"
     *     }
     */
-	router.post('/:mid/add-reaction', messageController.addReaction);
+	router.post('/:mid/reaction', messageController.addReaction);
 
 	// ... and other possible routes like updating/removing message and removing reaction (tbd)
 	

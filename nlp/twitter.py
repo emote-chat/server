@@ -52,6 +52,7 @@ class TwitterDataCollection:
     TWITTER_KEY = constants.TWITTER_KEY
     TWITTER_SECRET = constants.TWITTER_SECRET
 
+
     def __init__(self, use_search):
         """Load pickle file if it exists and open stream or search."""
         global emoji_dict
@@ -78,6 +79,7 @@ class TwitterDataCollection:
         ) as error:
             print(error)
             print('Missing TWITTER_KEY and TWITTER_SECRET env vars')
+
 
     def sig_int_handler(self, sig, frame):
         """Handles SIGINT, writing to pickle with all retrieved data."""
@@ -125,10 +127,7 @@ class TwitterDataCollection:
 
 
     def twitter_auth(self):
-        """PART 1: AUTHENTICATING
-
-        Run the script, go to the auth url and verify.
-        """
+        """Authenticate user and get credentials necessary for opening stream."""
         twitter = Twython(self.TWITTER_KEY, self.TWITTER_SECRET)
         auth = twitter.get_authentication_tokens()
 
@@ -168,9 +167,7 @@ class TwitterDataCollection:
 
 
     def twitter_cred(self, url):
-        """PART 2: GETTING CREDENTIALS
-
-        Enter keys from PART 1.
+        """Get and update authorization tokens given oauth verifier.
 
         Note: OAUTH_VERIFIER comes from the redirect URL hash.
         """
@@ -197,7 +194,7 @@ class TwitterDataCollection:
 
 
     def open_stream(self):
-        """PART 3: USE CREDENTIALS TO OPEN STREAM"""
+        """Use credentials to open stream"""
         # I think we can only open one stream at a time
         QUERY = '&'.join(EMOJIS[0])
 

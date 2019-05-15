@@ -47,6 +47,14 @@ def clean_tweet(tweet):
             emoji_dict[EMOJIS[0]] = [tweet]
 
 
+def write_pickle():
+    filename = 'tweets' if 'nlp' in os.getcwd() else 'nlp/tweets'
+
+    with open(filename, 'wb') as f:
+        pickle.dump(emoji_dict, f)
+    f.close()
+
+
 class TwitterDataCollection:
     # Twitter Setup
     TWITTER_KEY = constants.TWITTER_KEY
@@ -186,6 +194,8 @@ class TwitterDataCollection:
             for tweet in RESULTS['statuses']:
                 clean_tweet(tweet['text'])
 
+        write_pickle()
+
 
     def __init__(self, use_search):
         """Load pickle file if it exists and open stream or search."""
@@ -224,14 +234,7 @@ class TwitterDataCollection:
 
         print(f'Terminated by {signal.SIGINT.name}.')
 
-        filename = 'tweets' if 'nlp' in os.getcwd() else 'nlp/tweets'
-
-        # When done streaming, open the output file and dump emoji_dict into it
-        with open(filename, 'wb') as f:
-            pickle.dump(emoji_dict, f)
-        f.close()
-
-        print(emoji_dict[EMOJIS[0]])
+        write_pickle()
 
         exit(0)
 

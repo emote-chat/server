@@ -47,30 +47,82 @@ def clean_tweet(tweet):
             emoji_dict[EMOJIS[0]] = [tweet]
 
 
-def write_pickle():
-    filename = 'tweets' if 'nlp' in os.getcwd() else 'nlp/tweets'
-
-    with open(filename, 'wb') as f:
-        pickle.dump(emoji_dict, f)
-    f.close()
-
-
 class TwitterDataCollection:
     # Twitter Setup
     TWITTER_KEY = constants.TWITTER_KEY
     TWITTER_SECRET = constants.TWITTER_SECRET
 
+    def __init__(self, use_search):
+        """Load pickle file if it exists and open stream or search."""
+        global emoji_dict
 
-    class MyStreamer(TwythonStreamer):
-        """UPDATE WITH ONE-LINE DESCRIPTION."""
+        self.filename = 'tweets' if 'nlp' in os.getcwd() else 'nlp/tweets'
 
-        def on_success(self, data):
-            if 'text' in data:
-                clean_tweet(data.get('text'))
+        signal.signal(signal.SIGINT, self.sig_int_handler)
 
-        def on_error(self, status_code, data):
-            print(status_code)
-            self.disconnect()
+        if os.path.getsize(self.filename) > 0:
+            in_file = open(self.filename, 'rb')
+            emoji_dict = pickle.load(in_file)
+            in_file.close()
+
+        try:
+            if use_search:
+                self.connect_twitter_search()
+            else:
+                self.connect_twitter_stream()
+
+        except (
+            exceptions.TwythonAuthError,
+            exceptions.TwythonError,
+            ValueError
+        ) as error:
+            print(error)
+            print('Missing TWITTER_KEY and TWITTER_SECRET env vars')
+
+    def sig_int_handler(self, sig, frame):
+        """Handles SIGINT, writing to pickle with all retrieved data."""
+        print(f'Terminated by {signal.SIGINT.name}.')
+
+        self.write_pickle()
+
+        exit(0)
+
+    def connect_twitter_stream(self):
+        """Connects to Twitter Stream API."""
+        # set up authentication using oauth v1.0
+        self.twitter_auth()
+        # open stream (tweets in real-time)
+        self.open_stream()
+
+    def connect_twitter_search(self):
+        """Connects to Twitter Search API.
+
+        Simpler as it doesn't require oauth.
+        NOTE: tweets are limited to 100 at a time.
+        """
+        twitter = Twython(
+            self.TWITTER_KEY,
+            self.TWITTER_SECRET,
+            oauth_version=2
+        )
+        TWITTER_ACCESS_TOKEN = twitter.obtain_access_token()
+
+        twitter = Twython(self.TWITTER_KEY, access_token=TWITTER_ACCESS_TOKEN)
+
+        for emoji in EMOJIS:
+            QUERY = '&'.join(emoji)
+            RESULTS = twitter.search(
+                q=QUERY,
+                count=100,
+                result_type='mixed',
+                lang='en'
+            )
+
+            for tweet in RESULTS['statuses']:
+                clean_tweet(tweet['text'])
+
+        self.write_pickle()
+
 
     def twitter_auth(self):
         """PART 1: AUTHENTICATING
@@ -149,95 +201,31 @@ class TwitterDataCollection:
         # I think we can only open one stream at a time
         QUERY = '&'.join(EMOJIS[0])
 
-        stream = self.MyStreamer(
+        self.stream = MyStreamer(
             self.TWITTER_KEY,
             self.TWITTER_SECRET,
             self.OAUTH_TOKEN,
             self.OAUTH_TOKEN_SECRET
         )
 
-        stream.statuses.filter(track=QUERY, language='en')
+        self.stream.statuses.filter(track=QUERY, language='en')
+
+    def write_pickle(self):
+        with open(self.filename, 'wb') as f:
+            pickle.dump(emoji_dict, f)
+        f.close()
 
 
-    def connect_twitter_stream(self):
-        """Connects to Twitter Stream API."""
-        # set up authentication using oauth v1.0
-        self.twitter_auth()
-        # open stream (tweets in real-time)
-        self.open_stream()
+class MyStreamer(TwythonStreamer):
+        """UPDATE WITH ONE-LINE DESCRIPTION."""
 
+        def on_success(self, data):
+            if 'text' in data:
+                clean_tweet(data.get('text'))
 
-    def connect_twitter_search(self):
-        """Connects to Twitter Search API.
-
-        Simpler as it doesn't require oauth.
-        NOTE: tweets are limited to 100 at a time.
-        """
-        twitter = Twython(
-            self.TWITTER_KEY,
-            self.TWITTER_SECRET,
-            oauth_version=2
-        )
-        TWITTER_ACCESS_TOKEN = twitter.obtain_access_token()
-
-        twitter = Twython(self.TWITTER_KEY, access_token=TWITTER_ACCESS_TOKEN)
-
-        for emoji in EMOJIS:
-            QUERY = '&'.join(emoji)
-            RESULTS = twitter.search(
-                q=QUERY,
-                count=100,
-                result_type='mixed',
-                lang='en'
-            )
-
-            for tweet in RESULTS['statuses']:
-                clean_tweet(tweet['text'])
-
-        write_pickle()
-
-
-    def __init__(self, use_search):
-        """Load pickle file if it exists and open stream or search."""
-        global emoji_dict
-
-        signal.signal(signal.SIGINT, self.sig_int_handler)
-
-        if (Path('nlp/tweets')).is_file():
-            filename = 'nlp/tweets'
-        else:
-            filename = 'tweets'
-
-        if os.path.getsize(filename) > 0:
-            in_file = open(filename, 'rb')
-            emoji_dict = pickle.load(in_file)
-            in_file.close()
-
-        try:
-            if use_search:
-                self.connect_twitter_search()
-            else:
-                self.connect_twitter_stream()
-
-        except (
-            exceptions.TwythonAuthError,
-            exceptions.TwythonError,
-            ValueError
-        ) as error:
-            print(error)
-            print('Missing TWITTER_KEY and TWITTER_SECRET env vars')
-
-
-    def sig_int_handler(self, sig, frame):
-        """Handles SIGINT, writing to pickle with all retrieved data."""
-        global emoji_dict
-
-        print(f'Terminated by {signal.SIGINT.name}.')
-
-        write_pickle()
-
-        exit(0)
-
+        def on_error(self, status_code, data):
+            print(status_code)
+            self.disconnect()
 
 # Execute main method upon running script
 if __name__ == '__main__':

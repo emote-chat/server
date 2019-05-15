@@ -214,7 +214,7 @@ class TwitterDataCollection:
 
 
 class MyStreamer(TwythonStreamer):
-        """Class necessary for setting up stream.
+        """Designates what to do for stream upon success/error.
 
         See: https://twython.readthedocs.io/en/latest/usage/streaming_api.html
         """

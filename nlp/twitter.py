@@ -127,7 +127,7 @@ class TwitterDataCollection:
 
 
     def twitter_auth(self):
-        """Authenticate user and get credentials necessary for opening stream."""
+        """Authenticate and get credentials necessary for opening stream."""
         twitter = Twython(self.TWITTER_KEY, self.TWITTER_SECRET)
         auth = twitter.get_authentication_tokens()
 

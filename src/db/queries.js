@@ -49,6 +49,7 @@ module.exports = {
     
     // messages
     createMessage: new PS('create-message', 'INSERT INTO messages(chats_id, users_id, text) VALUES($1, $2, $3) RETURNING *'),
+    findChatIdByMessageId: new PS('find-chat-id-by-message-id', 'SELECT chats_id FROM messages WHERE id = $1'),
     findMessagesByChatId: new PS('find-messages-by-chat-id', 
         `SELECT 
             messages.id,
@@ -58,5 +59,6 @@ module.exports = {
         FROM messages 
         WHERE chats_id = $1`
     ),
+    // users_emojis_reactions
     addReaction: new PS('add-reaction', 'INSERT INTO users_messages_emojis(messages_id, users_id, emoji) VALUES($1, $2, $3) RETURNING *'),
 }

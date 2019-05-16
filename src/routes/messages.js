@@ -2,7 +2,12 @@ module.exports = (() => {
 	const express = require('express');
 	const router = express.Router();
 	const path = require('path');
-	const messageController = require(path.join(__dirname, '../controllers/message.controller'));
+    const messageController = require(path.join(__dirname, '../controllers/message.controller'));
+    // bring in middleware to verify user's membership in chat
+    const membershipMiddleware = require(path.join(__dirname, '../middlewares/membership'));
+
+    // must have some middleware to verify user making the API call is part of the given chat
+    router.use('/:mid/*', membershipMiddleware);
 
     /**
     * @api {post} /:mid/add-reaction Add Reaction
@@ -39,6 +44,14 @@ module.exports = (() => {
     *     HTTP/1.1 401 Unauthorized
     *     {
     *          "message": "Invalid/missing token"
+    *     }
+    * 
+    * @apiError ChatOrMessageNotFound Message does not refer to a chat that exists.
+    *
+    * @apiErrorExample ChatOrMessageNotFound Response:
+    *     HTTP/1.1 404 Not Found
+    *     {
+    *          "message": "Given chat or message not found"
     *     }
     */
 	router.post('/:mid/add-reaction', messageController.addReaction);

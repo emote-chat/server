@@ -93,6 +93,17 @@ describe('Test Suite for message', () => {
         done();
     });
 
+    test('POST /api/message/:mid/add-reaction should respond with 404 if message does NOT exist', async (done) => {
+        const { statusCode } = await request(server)
+            .post('/api/message/2/add-reaction')
+            .set('Authorization', `Bearer ${accessToken}`);
+
+        // expect not found since message id invalid (message does not exist)
+        expect(statusCode).toBe(404);
+
+        done();
+    });
+
     test('POST /api/message/:mid/add-reaction with proper data should respond with 201', async (done) => {
         const { statusCode, text } = await request(server)
             .post(`/api/message/${message.id}/add-reaction`)

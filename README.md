@@ -41,6 +41,7 @@ npm test
 ### Installation
 
 1. Don't forget to define `TWITTER_USER`, `TWITTER_PASS`, `TWITTER_KEY` and `TWITTER_SECRET` in your `.env` file. *Refer to the `.env.example` to be sure you define the necessary environment variables.*
+1. If planning to get more data using a twitter stream, download [this ChromeDriver zip file](https://chromedriver.storage.googleapis.com/index.html?path=74.0.3729.6/), unzip it and copy the executable into the `nlp` directory.
 1. Update and activate the Anaconda virtual env:
 
 ```sh
@@ -48,7 +49,7 @@ conda env update -f nlp/env.yml --prune
 conda activate emote
 ```
 
-### Get More Tweets
+### Get More Data
 * To use twitter stream (live tweets; *note that you must have [Twitter login verification](https://twitter.com/settings/account) (2-factor authentication) temporarily turned off* as the script uses your username and password to authenticate you along with your app key and secret to acquire the proper oauth v1.0 credentials &mdash; v2.0 is not available for streams):
 
 ```sh

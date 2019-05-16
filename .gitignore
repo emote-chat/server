@@ -1,6 +1,9 @@
+.env
+
 **/node_modules/**/*
 **/npm-debug.*
 public/
+
 **/.vscode/
 
 # OS-generated files #

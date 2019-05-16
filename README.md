@@ -10,7 +10,7 @@
 <!-- update later with screenshot or gif of application -->
 ![header](https://user-images.githubusercontent.com/29691658/56085479-a48e0c00-5e09-11e9-9a68-08c8d5cf93d0.png)
 
-## Local Database Setup for UNIX-based Systems
+## Database Setup for UNIX-based Systems
 <!-- remove next two steps later because we'll want to seed the database as part of running the server locally in 'development' mode -->
 
 1. Install [PostgreSQL](https://www.postgresql.org/download/) **major version 11**. We recommend using [homebrew](https://brew.sh/).
@@ -21,7 +21,7 @@
 1. To exit the postgres UNIX account: `exit`
 1. Create a file named `.env` at the root of the project with the variables in `.env.example` and replace with the host, user, user password and database information for the databases you'll be using for development and testing respectively. `DEV_DB_HOST` and `TEST_DB_HOST` default to `localhost` so you don't have to include those variables if you plan to use `localhost`. It is suggested that you specify separate tables for `DEV_DB_NAME` and `TEST_DB_NAME` since the test suites will wipe the test database clean before running each test suite. *Please note that production database information is only accessible to the project owners.*
 
-## Locally Run Server
+## Run Server
 
 OS X, Linux and Windows:
 
@@ -30,20 +30,45 @@ npm install
 npm start
 ```
 
-## Locally Run Tests
+## Run Tests
 ```sh
 npm install
 npm test
 ```
 
-### NLP Installation
+## NLP 
 
-1. Add `TWITTER_KEY` and `TWITTER_SECRET` to your environment variables.
+### Installation
+
+1. Don't forget to define `TWITTER_USER`, `TWITTER_PASS`, `TWITTER_KEY` and `TWITTER_SECRET` in your `.env` file. *Refer to the `.env.example` to be sure you define the necessary environment variables.*
 1. Update and activate the Anaconda virtual env:
 
-```
+```sh
 conda env update -f nlp/env.yml --prune
 conda activate emote
+```
+
+### Get More Tweets
+* To use twitter stream (live tweets; *note that you must have [Twitter login verification](https://twitter.com/settings/account) (2-factor authentication) temporarily turned off* as the script uses your username and password to authenticate you along with your app key and secret to acquire the proper oauth v1.0 credentials &mdash; v2.0 is not available for streams):
+
+```sh
+python nlp/twitter.py
+```
+
+* To use twitter search and get 100 tweets at a time:
+
+```sh
+python nlp/twitter.py -se
+```
+
+## Read Tweets Pickle
+```sh
+python nlp/read.py
+```
+
+## Process Tweets Pickle
+```sh
+python nlp/process.py
 ```
 
 <!-- ## Usage example -->

@@ -71,10 +71,10 @@ describe('Test Suite for message', () => {
         done();
     });
 
-    // POST /api/message/1/add-reaction; add reaction to message
-    test('POST /api/message/:mid/add-reaction should respond with 401 if user NOT authenticated', async (done) => {
+    // POST /api/message/1/reaction; add reaction to message
+    test('POST /api/message/:mid/reaction should respond with 401 if user NOT authenticated', async (done) => {
         const { statusCode } = await request(server)
-            .post('/api/message/1/add-reaction');
+            .post('/api/message/1/reaction');
 
         // expect not authorized error since token not set/sent in headers
         expect(statusCode).toBe(401);
@@ -82,9 +82,9 @@ describe('Test Suite for message', () => {
         done();
     });
 
-    test('POST /api/message/:mid/add-reaction should respond with 400 if missing data', async (done) => {
+    test('POST /api/message/:mid/reaction should respond with 400 if missing data', async (done) => {
         const { statusCode } = await request(server)
-            .post('/api/message/1/add-reaction')
+            .post('/api/message/1/reaction')
             .set('Authorization', `Bearer ${accessToken}`);
 
         // expect bad request error since data/emoji missing
@@ -93,9 +93,9 @@ describe('Test Suite for message', () => {
         done();
     });
 
-    test('POST /api/message/:mid/add-reaction should respond with 404 if message does NOT exist', async (done) => {
+    test('POST /api/message/:mid/reaction should respond with 404 if message does NOT exist', async (done) => {
         const { statusCode } = await request(server)
-            .post('/api/message/2/add-reaction')
+            .post('/api/message/2/reaction')
             .set('Authorization', `Bearer ${accessToken}`);
 
         // expect not found since message id invalid (message does not exist)
@@ -104,9 +104,9 @@ describe('Test Suite for message', () => {
         done();
     });
 
-    test('POST /api/message/:mid/add-reaction with proper data should respond with 201', async (done) => {
+    test('POST /api/message/:mid/reaction with proper data should respond with 201', async (done) => {
         const { statusCode, text } = await request(server)
-            .post(`/api/message/${message.id}/add-reaction`)
+            .post(`/api/message/${message.id}/reaction`)
             .set('Authorization', `Bearer ${accessToken}`)
             .set('userId', otherUserId)
             .send(reactionData);

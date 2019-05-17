@@ -10,17 +10,16 @@ module.exports = (() => {
     router.use('/:mid/*', membershipMiddleware);
 
     /**
-    * @api {post} /:mid/add-reaction Add Reaction
+    * @api {post} /:mid/reaction Add reaction to message
     * @apiName AddReaction
     * @apiGroup Message
     *
-    * @apiHeader {String} token Authorization Bearer Token.
-    * @apiHeader {Number} id User id.
-    * @apiParam {String} :mid Message's id.
+	* @apiHeader {String} token Authorization Bearer Token.
+    * @apiParam {String} mid Message's id.
     *
-    * @apiSuccess (Success 201) {Number} id Message ID.
-    * @apiSuccess (Success 201) {Number} id User ID.
-    * @apiSuccess (Success 201) {String} emoji Emoji.
+    * @apiSuccess (Created 201) {Number} id Message ID.
+    * @apiSuccess (Created 201) {Number} id User ID.
+    * @apiSuccess (Created 201) {String} emoji Emoji.
     *
     * @apiSuccessExample Success Response:
     *     HTTP/1.1 201 Created
@@ -54,7 +53,7 @@ module.exports = (() => {
     *          "message": "Given chat or message not found"
     *     }
     */
-	router.post('/:mid/add-reaction', messageController.addReaction);
+	router.post('/:mid/reaction', messageController.addReaction);
 
 	// ... and other possible routes like updating/removing message and removing reaction (tbd)
 	

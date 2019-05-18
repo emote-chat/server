@@ -140,14 +140,16 @@ describe('Test Suite for chat', () => {
                 id: 1,
                 users_id: 1,
                 text: 'hey',
-                created: '2019-05-06T14:35:24.848Z'
+                created: '2019-05-06T14:35:24.848Z',
+                reactions: []
             }
         */
         expect(JSON.parse(text)).toEqual({
             id: 1,
             users_id: 1,
             text: 'hey',
-            created: expect.any(String)
+            created: expect.any(String),
+            reactions: expect.arrayContaining([])
         });
 
         done();

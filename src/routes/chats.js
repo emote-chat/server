@@ -124,13 +124,20 @@ module.exports = (() => {
 	*               "id": 4,
 	*               "users_id": 2,
 	*               "created": "2019-05-04T00:31:35.880Z",
-	*               "text": "here's a message"
+	*               "text": "here's a message",
+	*               "reactions": [
+	*                    {
+	*                         "users_id": 2,
+	*                         "emoji": "😀"
+	*                    }
+	*               ]
 	*          },
 	*          {
 	*               "id": 2,
 	*               "users_id": 1,
 	*               "created": "2019-05-03T23:33:41.659Z",
-	*               "text": "here's another message"
+	*               "text": "here's another message",
+	*               "reactions": []
 	*          }
  	*     ]
 	*
@@ -173,7 +180,8 @@ module.exports = (() => {
 	*          "id": 4,
 	*          "users_id": 2,
 	*          "created": "2019-05-04T00:31:35.880Z",
-	*          "text": "here's a message"
+	*          "text": "here's a message",
+	*          "reactions": []
 	*     }
 	*
 	* @apiError MissingFields Missing one or more of required fields <code>email</code>, <code>password</code> and/or <code>display_name</code>.

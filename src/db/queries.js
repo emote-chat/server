@@ -57,14 +57,16 @@ module.exports = {
             m.users_id,
             m.text,
             m.created,
-            json_agg(
-                json_build_object(
-                    'users_id', users_messages_emojis.users_id,
-                    'emoji', users_messages_emojis.emoji
-                )
+            COALESCE(
+                json_agg(
+                    json_build_object(
+                        'users_id', ume.users_id,
+                        'emoji', ume.emoji
+                    )
+                ) FILTER (WHERE emoji IS NOT NULL), '[]'
             ) AS reactions
         FROM messages AS m
-        LEFT OUTER JOIN users_messages_emojis ON users_messages_emojis.messages_id=m.id
+        LEFT JOIN users_messages_emojis AS ume ON ume.messages_id=m.id
         WHERE chats_id = $1
         GROUP BY m.id`
     ),

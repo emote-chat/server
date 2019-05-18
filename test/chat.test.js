@@ -1,7 +1,7 @@
 const path = require('path');
 const request = require('supertest');
 const app = require(path.join(__dirname, '../src/config/app'));
-const { user, anotherUser } = require(path.join(__dirname, 'helpers/db'));
+const { user, anotherUser, reactionData } = require(path.join(__dirname, 'helpers/db'));
 const { initSchema } = require(path.join(__dirname, '../src/db/migrations/seed'));
 
 describe('Test Suite for chat', () => {
@@ -187,6 +187,12 @@ describe('Test Suite for chat', () => {
     });
 
     test('GET /api/chat/:cid should respond with 200 if authenticated and member of chat', async (done) => {
+        // add reactions to test for in response
+        await request(server)
+            .post(`/api/message/1/reaction`)
+            .set('Authorization', `Bearer ${accessToken}`)
+            .send(reactionData);
+
         const { statusCode, text } = await request(server)
             .get('/api/chat/1')
             .set('Authorization', `Bearer ${accessToken}`);
@@ -202,8 +208,14 @@ describe('Test Suite for chat', () => {
                     id: 1,
                     text: 'hey',
                     created: '2019-05-06T14:35:24.848Z',
-                    users_id: 1
-                } 
+                    users_id: 1,
+                    reactions: [
+                        {
+                            users_id: 1,
+                            emoji: 😀
+                        }
+                    ]
+                }
             ]
         */
         expect(JSON.parse(text)).toEqual(
@@ -212,7 +224,12 @@ describe('Test Suite for chat', () => {
                     id: 1,
                     users_id: 1,
                     text: 'hey',
-                    created: expect.any(String)
+                    created: expect.any(String),
+                    reactions: [
+                    {
+                        users_id: expect.any(Number),
+                        emoji: expect.any(String)
+                    }]
                 })
             ])
         );

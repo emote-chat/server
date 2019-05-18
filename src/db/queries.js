@@ -43,7 +43,7 @@ module.exports = {
     ),
     
     // users_chats
-    addUserToChat: new PS('add-user-to-chat', 'INSERT INTO users_chats(users_id, chats_id) VALUES($1, $2)'),
+    addUserToChat: new PS('add-user-to-chat', 'INSERT INTO users_chats(users_id, chats_id) VALUES($1, $2) RETURNING users_id'),
     deleteUserFromChat: new PS('delete-user-from-chat', 'DELETE FROM users_chats WHERE chats_id = $1 AND users_id = $2'),
     findChatIdsByUserId: new PS('find-chat-ids-by-user-id', 'SELECT chats_id FROM users_chats WHERE users_id = $1'),
     

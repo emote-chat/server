@@ -104,7 +104,7 @@ exports.getMessagesInChat = async (req, res, next) => {
 exports.addUserToChat = async (req, res, next) => {
     try {
         // add user id and chat id to users_chats
-        const { id: userId } = await addUser(req.params.uid, req.params.cid);
+        const { users_id: id } = await addUser(req.params.uid, req.params.cid);
         // find user by user id
         const user = await db.one(queries.findUserById, [id]);
         // success; return nothing

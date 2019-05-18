@@ -36,7 +36,7 @@ module.exports = (() => {
 	*          "message": "User not found"
 	*     }
 	*/
-	router.get('/:email', userController.getUserIdByEmail);
+	router.get('/:email', userController.getUserByEmail);
 
 	// API endpoint to update user profile (if time permits)
 	// router.put('/:id', userController.updateInfo);

@@ -7,7 +7,7 @@ const getPayload = require(path.join(__dirname, '../helpers/jwt'));
 const addUser = async (userId, chatId) => {
     try {
         // add user id and chat id to users_chats
-        await db.none(queries.addUserToChat, [userId, chatId]);
+        return await db.one(queries.addUserToChat, [userId, chatId]);
     }
     catch(error) {
         // check if primary key constraint violated
@@ -104,9 +104,11 @@ exports.getMessagesInChat = async (req, res, next) => {
 exports.addUserToChat = async (req, res, next) => {
     try {
         // add user id and chat id to users_chats
-        await addUser(req.params.uid, req.params.cid);
+        const { id: userId } = await addUser(req.params.uid, req.params.cid);
+        // find user by user id
+        const user = await db.one(queries.findUserById, [id]);
         // success; return nothing
-        return res.status(201).json();
+        return res.status(201).json(user);
     }
     catch(error) {
         if (error) return next(error);

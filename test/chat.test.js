@@ -363,11 +363,16 @@ describe('Test Suite for chat', () => {
     });
 
     test('DELETE /api/chat/:cid/:uid should respond with 204 if user authenticated and member of chat', async (done) => {
-        const { statusCode } = await request(server)
+        const { statusCode, text } = await request(server)
             .delete('/api/chat/1/2')
             .set('Authorization', `Bearer ${accessToken}`);
 
-        expect(statusCode).toBe(204);
+        expect(statusCode).toBe(200);
+        
+        expect(JSON.parse(text)).toEqual({
+            chats_id: 1, 
+            users_id: 2
+        });
 
         done();
     });

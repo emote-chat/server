@@ -5,7 +5,8 @@ const queries = require(path.join(__dirname, '../db/queries'));
 
 exports.getUserByEmail = async (req, res, next) => {
     try {
-        const resp = await db.any(queries.findUserByEmail, [req.params.email]);
+        const email = req.params.email.toLowerCase();
+        const resp = await db.any(queries.findUserByEmail, [email]);
         if (!resp.length) return res.status(404).send({ message: 'User not found' });
         
         const { password, ...user } = resp[0];

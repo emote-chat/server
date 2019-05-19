@@ -60,15 +60,17 @@ describe('Test Suite for user', () => {
     });
 
     test('GET /api/user/:email should respond with 200 if user authenticated AND user exists', async (done) => {
+        const { password, ...user } = anotherUser;
         const { statusCode, text } = await request(server)
-            .get(`/api/user/${anotherUser.email}`)
+            .get(`/api/user/${user.email}`)
             .set('Authorization', 'Bearer ' + accessToken);
 
         expect(statusCode).toBe(200);
 
         // verify response data is correct
         expect(JSON.parse(text)).toEqual({
-            id: expect.any(Number)
+            id: 2,
+            ...user
         });
 
         done();

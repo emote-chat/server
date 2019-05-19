@@ -5,8 +5,8 @@ module.exports = (() => {
 	const userController = require(path.join(__dirname, '../controllers/user.controller'));
 
 	/**
-	* @api {get} /user/:email Get user ID by email
-	* @apiName GetUserIdByEmail
+	* @api {get} /user/:email Get user by email
+	* @apiName GetUserByEmail
 	* @apiGroup User
 	*
 	* @apiParam {String} email User email.
@@ -14,11 +14,19 @@ module.exports = (() => {
 	* @apiHeader {String} token Authorization Bearer Token.
 	*
 	* @apiSuccess {Number} id User ID.
+	* @apiSuccess {String} email User email.
+	* @apiSuccess {String} display_name User display name.
+	* @apiSuccess {String} first_name User first name.
+	* @apiSuccess {String} last_name User last name.
 	*
 	* @apiSuccessExample Success Response:
 	*     HTTP/1.1 200 OK
 	*     {
-	*          "id": 1
+	*          "id": 1,
+	*          "email": "ghi@gmail.com",
+	*          "display_name": "ghi",
+	*          "first_name": "ghi",
+	*          "last_name": null
 	*     }
 	*
 	* @apiError UnauthorizedError Invalid/missing token in authorization header.

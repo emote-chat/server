@@ -51,13 +51,24 @@ module.exports = {
     createMessage: new PS('create-message', 'INSERT INTO messages(chats_id, users_id, text) VALUES($1, $2, $3) RETURNING *'),
     findChatIdByMessageId: new PS('find-chat-id-by-message-id', 'SELECT chats_id FROM messages WHERE id = $1'),
     findMessagesByChatId: new PS('find-messages-by-chat-id', 
-        `SELECT 
-            messages.id,
-            users_id,
-            created,
-            text
-        FROM messages 
-        WHERE chats_id = $1`
+        `SELECT
+            m.id,
+            m.chats_id,
+            m.users_id,
+            m.text,
+            m.created,
+            COALESCE(
+                json_agg(
+                    json_build_object(
+                        'users_id', ume.users_id,
+                        'emoji', ume.emoji
+                    )
+                ) FILTER (WHERE emoji IS NOT NULL), '[]'
+            ) AS reactions
+        FROM messages AS m
+        LEFT JOIN users_messages_emojis AS ume ON ume.messages_id=m.id
+        WHERE chats_id = $1
+        GROUP BY m.id`
     ),
     // users_emojis_reactions
     addReaction: new PS('add-reaction', 'INSERT INTO users_messages_emojis(messages_id, users_id, emoji) VALUES($1, $2, $3) RETURNING *'),

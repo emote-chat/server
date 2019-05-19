@@ -29,8 +29,9 @@ VALUES
     (1, 2, 'Test message, chat id 2, user id 1');
 
 -- need to decide how we'll be storing emojis; first method may be best
--- INSERT INTO users_messages_emojis(users_id, messages_id, emoji)
--- VALUES  
---     (1, 1, ':joy:'), 
---     (2, 2, '\u03B1'), 
---     (3, 3, U&'\1F601');
+INSERT INTO users_messages_emojis(users_id, messages_id, emoji)
+VALUES
+    (1, 1, '😄'),
+    (2, 1, '😂'),
+    (1, 2, '😂'),
+    (3, 3, '😮');

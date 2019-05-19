@@ -63,7 +63,7 @@ exports.createMessage = async (req, res, next) => {
         const { chats_id, ...insertedMessage } = await db.one(queries.createMessage, message);
 
         // success; return nothing
-        return res.status(201).json(insertedMessage);
+        return res.status(201).json({...insertedMessage, reactions: []});
     }
     catch(error) {
         console.log(error);

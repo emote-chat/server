@@ -16,10 +16,11 @@ module.exports = (() => {
     *
 	* @apiHeader {String} token Authorization Bearer Token.
     * @apiParam {String} mid Message's id.
+	* @apiParam (Request body) {String} emoji Emoji reaction.
     *
-    * @apiSuccess (Created 201) {Number} id Message ID.
-    * @apiSuccess (Created 201) {Number} id User ID.
-    * @apiSuccess (Created 201) {String} emoji Emoji.
+    * @apiSuccess (Created 201) {Number} messages_id Message ID.
+    * @apiSuccess (Created 201) {Number} users_id User ID.
+    * @apiSuccess (Created 201) {String} emoji Emoji reaction.
     *
     * @apiSuccessExample Success Response:
     *     HTTP/1.1 201 Created

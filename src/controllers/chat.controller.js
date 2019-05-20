@@ -119,9 +119,9 @@ exports.deleteUserFromChat = async (req, res, next) => {
     try {
         // delete row from users_chats 
         // where chat id and user id match params
-        await db.none(queries.deleteUserFromChat, [req.params.cid, req.params.uid]);
+        const deletedUser = await db.one(queries.deleteUserFromChat, [req.params.cid, req.params.uid]);
         // success; return nothing
-        return res.status(204).json();
+        return res.status(200).json(deletedUser);
     }
     catch(error) {
         if (error) return next(error);

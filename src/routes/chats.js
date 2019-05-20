@@ -70,7 +70,7 @@ module.exports = (() => {
 	* @apiGroup Chat
 	*
 	* @apiHeader {String} token Authorization Bearer Token.
-	* @apiParam (Request body) {String} [name] Chat's name.
+	* @apiParam (Request body) {String} name Chat's name.
 	*
 	* @apiSuccess (Success 201) {Number} id Chat ID.
 	* @apiSuccess (Success 201) {String} name Chat name.
@@ -113,9 +113,13 @@ module.exports = (() => {
 	*
 	* @apiSuccess {Object[]} - List of messages.
 	* @apiSuccess {Number} -.id Message id.
-	* @apiSuccess {Number} -.users_id User ID of user who posted message.
+	* @apiSuccess {Number} -.users_id User ID.
 	* @apiSuccess {String} -.created Message timestamp with timezone; defaults to current.
 	* @apiSuccess {String} -.text Message text.
+	* @apiSuccess {Object[]} -.reactions List of emoji reactions.
+	* @apiSuccess {Object} -.reactions.- Emoji reaction.
+	* @apiSuccess {Number} -.reactions.-.users_id User id.
+	* @apiSuccess {String} -.reactions.-.emoji User emoji reaction.
 	*
 	* @apiSuccessExample Success Response:
 	*     HTTP/1.1 200 OK
@@ -174,6 +178,12 @@ module.exports = (() => {
 	*
 	* @apiParam {Number} cid Chat ID.
 	*
+	* @apiSuccess {Number} id Message id.
+	* @apiSuccess {Number} users_id User id.
+	* @apiSuccess {String} created Message timestamp with timezone; defaults to current.
+	* @apiSuccess {String} text Message text.
+	* @apiSuccess {Object[]} reactions Empty list of emoji reactions.
+	*
 	* @apiSuccessExample Success Response:
 	*     HTTP/1.1 201 Created
 	*     {
@@ -226,8 +236,15 @@ module.exports = (() => {
 	* @apiParam {Number} cid Chat ID.
 	* @apiParam {Number} uid User ID.
 	*
+	* @apiSuccess {Number} users_id User id.
+	* @apiSuccess {Number} chats_id Chat id.
+	*
 	* @apiSuccessExample Success Response:
 	*     HTTP/1.1 201 Created
+	*     {
+	*          "users_id": 1,
+	*          "chats_id": 1
+	*     }
 	*
 	* @apiError UnauthorizedError Invalid/missing token in authorization header.
 	*
@@ -271,8 +288,15 @@ module.exports = (() => {
 	* @apiParam {Number} cid Chat ID.
 	* @apiParam {Number} uid User ID.
 	*
+	* @apiSuccess {Number} users_id User id.
+	* @apiSuccess {Number} chats_id Chat id.
+	*
 	* @apiSuccessExample Success Response:
-	*     HTTP/1.1 204 No Content
+	*     HTTP/1.1 200 OK
+	*     {
+	*          "users_id": 1,
+	*          "chats_id": 1,
+	*     }
 	*
 	* @apiError UnauthorizedError Invalid/missing token in authorization header.
 	*

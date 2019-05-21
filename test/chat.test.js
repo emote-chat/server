@@ -76,7 +76,13 @@ describe('Test Suite for chat', () => {
         // expect id to be some number and name to be null since not specified in req
         expect(JSON.parse(text)).toEqual({
             id: 1,
-            name: chat.name
+            name: chat.name,
+            users: expect.arrayContaining([
+                expect.objectContaining({
+                    id: 1,
+                    display_name: user.display_name
+                })
+            ])
         });
 
         done();

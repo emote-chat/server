@@ -31,11 +31,11 @@ exports.createChat = async (req, res, next) => {
         const { id: userId } = getPayload(req.headers);
         // add user id (of user making req) and chat id to users_chats table
         await addUser(userId, chatId);
-        
-        // get chat just added to table, searching by id returned 
+
+        // get created chat along with users arr (includes only user making req)
         const chat = await db.one(queries.findChatById, [chatId]);
 
-        // created chat; return chat id and name
+        // created chat; return chat id, name and users arr  
         return res.status(201).json(chat);
     }
     catch(error) {

@@ -74,12 +74,20 @@ module.exports = (() => {
 	*
 	* @apiSuccess (Success 201) {Number} id Chat ID.
 	* @apiSuccess (Success 201) {String} name Chat name.
+	* @apiSuccess (Success 201) {Object[]} users List of users.
+	* @apiSuccess (Success 201) {Object} users.- User.
+	* @apiSuccess (Success 201) {Number} users.-.id User id.
+	* @apiSuccess (Success 201) {String} users.-.display_name User display name.
 	*
 	* @apiSuccessExample Success Response:
 	*     HTTP/1.1 201 Created
 	*     {
 	*          "id": 1,
 	*          "name": "Chat name"
+	*          "users": [
+	*               "id": 4,
+	*               "display_name": "User 4 display name",
+	*          ]
 	*     }
 	*
 	* @apiError MissingFields Missing one or more of required fields <code>email</code>, <code>password</code> and/or <code>display_name</code>.

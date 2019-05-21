@@ -19,8 +19,21 @@ module.exports = {
     findUserById: new PS('find-user-by-id', 'SELECT * FROM users WHERE id = $1'),
 
     // chats
-    createChat: new PS('create-chat', 'INSERT INTO chats(name) VALUES($1) RETURNING id'),
-    findChatById: new PS('find-chat-by-id', 'SELECT * FROM chats WHERE id = $1'),
+    createChat: new PS('create-chat', 'INSERT INTO chats(name) VALUES($1) RETURNING *'),
+    findChatById: new PS('find-chat-by-id', 
+        `SELECT 
+            c.*, 
+            json_agg(
+                json_build_object(
+                    'id', users_id, 
+                    'display_name', display_name
+                )
+            ) AS users 
+        FROM chats AS c
+        INNER JOIN users_chats AS uc ON uc.chats_id=c.id 
+        INNER JOIN users AS u ON uc.users_id=u.id 
+        WHERE c.id = $1 GROUP BY c.id, name`
+    ),
     findChatsByUserId: new PS('find-users-by-chat-id', 
         `SELECT 
             chats_id AS id, 

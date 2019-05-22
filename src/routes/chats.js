@@ -188,6 +188,7 @@ module.exports = (() => {
 	*
 	* @apiSuccess {Number} id Message id.
 	* @apiSuccess {Number} users_id User id.
+	* @apiSuccess {Number} chats_id Chat id.
 	* @apiSuccess {String} created Message timestamp with timezone; defaults to current.
 	* @apiSuccess {String} text Message text.
 	* @apiSuccess {Object[]} reactions Empty list of emoji reactions.
@@ -197,6 +198,7 @@ module.exports = (() => {
 	*     {
 	*          "id": 4,
 	*          "users_id": 2,
+	*          "chats_id": 1,
 	*          "created": "2019-05-04T00:31:35.880Z",
 	*          "text": "here's a message",
 	*          "reactions": []

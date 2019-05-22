@@ -31,7 +31,12 @@ if (app.get('mode') === 'production') {
         skip: function (req, res) {
             return res.statusCode < 400
         },
-        stream: __dirname + '/../morgan.log'
+        stream: require('fs').createWriteStream(
+            path.join(__dirname, '../../morgan.log'), 
+            { 
+                flags: 'a' 
+            }
+        )
     }));
 } else if (app.get('mode') === 'development') {
     app.use(morgan('dev'));

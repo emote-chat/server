@@ -28,6 +28,15 @@ io.on('connection', (socket) => {
         socket.broadcast.to(data.chats_id).emit('receiveReaction', data);
     });
 
+    socket.on('addUserToChat', data => {
+        socket.broadcast.to(data.chats_id).emit('receiveAddedUser', data);
+    });
+
+    socket.on('removeUserFromChat', data => {
+        socket.emit('removedSelf', data);
+        socket.broadcast.to(data.chats_id).emit('receiveRemovedUser', data);
+    });
+
     socket.on('disconnect', () => {
         console.log(`Disconnected - ${socket.id}`);
     });

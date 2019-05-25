@@ -74,12 +74,20 @@ module.exports = (() => {
 	*
 	* @apiSuccess (Success 201) {Number} id Chat ID.
 	* @apiSuccess (Success 201) {String} name Chat name.
+	* @apiSuccess (Success 201) {Object[]} users List of users.
+	* @apiSuccess (Success 201) {Object} users.- User.
+	* @apiSuccess (Success 201) {Number} users.-.id User id.
+	* @apiSuccess (Success 201) {String} users.-.display_name User display name.
 	*
 	* @apiSuccessExample Success Response:
 	*     HTTP/1.1 201 Created
 	*     {
 	*          "id": 1,
 	*          "name": "Chat name"
+	*          "users": [
+	*               "id": 4,
+	*               "display_name": "User 4 display name",
+	*          ]
 	*     }
 	*
 	* @apiError MissingFields Missing one or more of required fields <code>email</code>, <code>password</code> and/or <code>display_name</code>.
@@ -180,6 +188,7 @@ module.exports = (() => {
 	*
 	* @apiSuccess {Number} id Message id.
 	* @apiSuccess {Number} users_id User id.
+	* @apiSuccess {Number} chats_id Chat id.
 	* @apiSuccess {String} created Message timestamp with timezone; defaults to current.
 	* @apiSuccess {String} text Message text.
 	* @apiSuccess {Object[]} reactions Empty list of emoji reactions.
@@ -189,6 +198,7 @@ module.exports = (() => {
 	*     {
 	*          "id": 4,
 	*          "users_id": 2,
+	*          "chats_id": 1,
 	*          "created": "2019-05-04T00:31:35.880Z",
 	*          "text": "here's a message",
 	*          "reactions": []

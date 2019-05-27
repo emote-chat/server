@@ -1,8 +1,10 @@
 const path = require('path');
-
 const db = require(path.join(__dirname, '../db/index'));
 const queries = require(path.join(__dirname, '../db/queries'));
 const getPayload = require(path.join(__dirname, '../helpers/jwt'));
+const request = require('request');
+
+const emojiApiUrl = 'http://127.0.0.1:5000/';
 
 const addUser = async (userId, chatId) => {
     try {
@@ -62,7 +64,23 @@ exports.createMessage = async (req, res, next) => {
         // add message to messages table
         const insertedMessage = await db.one(queries.createMessage, message);
 
-        // success; return nothing
+        // send request to emoji predictor
+        request.post(
+            emojiApiUrl,
+            { form: { message: req.body.text } },
+            (error, response, body) => {
+                if (!error && response.statusCode == 200) {
+                    const { emoji } = JSON.parse(body);
+                    const recommendedEmoji = [
+                        insertedMessage.id,
+                        emoji
+                    ];
+                    db.none(queries.createRecommendedEmoji, recommendedEmoji);
+                }
+            }
+        );
+
+        // success; return new message
         return res.status(201).json({...insertedMessage, reactions: []});
     }
     catch(error) {

@@ -1,10 +1,11 @@
 -- drop all tables if they already exist before (re-)creating them
 DROP TABLE IF EXISTS 
-    users, 
-    messages, 
-    chats, 
-    users_chats, 
-    users_messages_emojis 
+    users,
+    messages,
+    chats,
+    users_chats,
+    recommended_emojis_messages,
+    users_messages_emojis
 CASCADE;
 
 -- create users table (note: 'user' is a reserved keyword in postgres)
@@ -42,6 +43,14 @@ CREATE TABLE users_chats (
     FOREIGN KEY(users_id) REFERENCES users(id) ON DELETE CASCADE, 
     FOREIGN KEY(chats_id) REFERENCES chats(id) ON DELETE CASCADE,
     PRIMARY KEY(users_id, chats_id)
+);
+
+-- create recommended_emojis_messages many-to-many table with fk ref to messages
+CREATE TABLE recommended_emojis_messages (
+    id serial PRIMARY KEY,
+    messages_id int NOT NULL,
+    emoji varchar(100) NOT NULL,
+    FOREIGN KEY(messages_id) REFERENCES messages(id) ON DELETE CASCADE
 );
 
 -- create users_messages_emojis many-to-many table with fk refs to users & messages

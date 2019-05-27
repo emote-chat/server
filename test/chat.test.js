@@ -224,7 +224,8 @@ describe('Test Suite for chat', () => {
                             users_id: 1,
                             emoji: 😀
                         }
-                    ]
+                    ],
+                    recommended: []
                 }
             ]
         */
@@ -239,7 +240,8 @@ describe('Test Suite for chat', () => {
                     {
                         users_id: expect.any(Number),
                         emoji: expect.any(String)
-                    }]
+                    }],
+                    recommended: expect.arrayContaining([])
                 })
             ])
         );

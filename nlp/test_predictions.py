@@ -1,22 +1,23 @@
-import nltk
-import pickle
-import numpy as np
-
+from argparse import ArgumentParser
 from sklearn.externals import joblib
-from sklearn.feature_extraction.text import TfidfVectorizer
+from pathlib import Path
 
-def main():
+def main(message):
     """File for testing predictions"""
-    data = ['i love you']
+    modelFile = Path.cwd() / 'nlp/tweets_model.pkl'
+    vectFile = Path.cwd() / 'nlp/tweets_vectorizer.pkl'
 
     # Load stored model and vectorizer
-    clf = joblib.load('tweets_model.pkl')
-    tf = joblib.load('tweets_vectorizer.pkl')
+    clf = joblib.load(modelFile)
+    tf = joblib.load(vectFile)
 
-    prediction = clf.predict(tf.transform(data))
-    pred_proba = clf.predict_proba(tf.transform(data))
+    prediction = clf.predict(tf.transform([message]))
+    pred_proba = clf.predict_proba(tf.transform([message]))
     print(prediction)
     print(pred_proba)
 
 if __name__ == '__main__':
-    main()
+    parser = ArgumentParser(description='testing emoji predictions')
+    parser.add_argument('--message', help='message to test prediction')
+    args = parser.parse_args()
+    main(args.message)

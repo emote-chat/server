@@ -67,11 +67,21 @@ python nlp/twitter.py -se
 python nlp/read.py
 ```
 
-## Process Tweets Pickle
+## Train Model Using Tweets Data
 ```sh
-python nlp/process.py
+python nlp/train.py
 ```
 
+## Test Model
+```sh
+python nlp/test_predictions.py --message 'message to test'
+```
+
+## Start Flask App for Emoji Prediction Endpoint
+```sh
+export FLASK_APP=nlp/app.py
+python -m flask run
+```
 <!-- ## Usage example -->
 
 <!-- A few motivating and useful examples of how your product can be used. Spice this up with code blocks and potentially more screenshots.

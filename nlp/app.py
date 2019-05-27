@@ -32,4 +32,4 @@ def main():
         return jsonify(emoji=prediction[0])
 
 if __name__ == '__main__':
-    app.run(debug=True) # Set to false for production
+    app.run(debug=True) # TODO Set to false for production

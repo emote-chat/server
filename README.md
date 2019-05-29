@@ -21,18 +21,23 @@
 1. To exit the postgres UNIX account: `exit`
 1. Create a file named `.env` at the root of the project with the variables in `.env.example` and replace with the host, user, user password and database information for the databases you'll be using for development and testing respectively. `DEV_DB_HOST` and `TEST_DB_HOST` default to `localhost` so you don't have to include those variables if you plan to use `localhost`. It is suggested that you specify separate tables for `DEV_DB_NAME` and `TEST_DB_NAME` since the test suites will wipe the test database clean before running each test suite. *Please note that production database information is only accessible to the project owners.*
 
-## Run Server
+## Setup
+
+### Installation
+```sh
+npm install
+```
+
+### Run Server
 
 OS X, Linux and Windows:
 
 ```sh
-npm install
 npm start
 ```
 
-## Run Tests
+### Run Tests
 ```sh
-npm install
 npm test
 ```
 
@@ -102,14 +107,6 @@ npm test
 * 0.0.1
     * Work in progress -->
 
-## Meta
-
-* Sonam Kindy – [@sonamdkindy](https://github.com/sonamdkindy)
-* Michele Larson – [@mnicole](https://github.com/mnicole)
-* Eric Newton – [@ernewtoner](https://github.com/ernewtoner)
-
-Distributed under the Apache v2.0 license. See the [LICENSE](LICENSE) file for more information.
-
 ## Contributing
 
 1. [Fork](https://help.github.com/en/articles/fork-a-repo#fork-an-example-repository) the repository
@@ -117,6 +114,15 @@ Distributed under the Apache v2.0 license. See the [LICENSE](LICENSE) file for m
 3. Commit your changes to the forked repo (`git commit -am 'Added fooBar that does x, y, z'`)
 4. Push the branch back to your forked repo (`git push origin feature/fooBar`)
 5. Create a [pull request from your fork](https://help.github.com/en/articles/creating-a-pull-request-from-a-fork)
+
+## Contributors
+
+* Sonam Kindy – [@sonamdkindy](https://github.com/sonamdkindy)
+* Michele Larson – [@mnicole](https://github.com/mnicole)
+* Eric Newtoner – [@ernewtoner](https://github.com/ernewtoner)
+
+## License
+Distributed under the Apache v2.0 license. See the [LICENSE](LICENSE) for more information.
 
 ## Resources
 * README template used is located [here](https://github.com/dbader/readme-template)

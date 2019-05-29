@@ -29,7 +29,7 @@ app.use(express.static(path.join(__dirname, '../../public')));
 if (app.get('mode') === 'production') {
     app.use(morgan('common', {
         skip: function (req, res) {
-            return res.statusCode < 400
+            return res.statusCode < 400 && req.url.includes('api')
         },
         stream: require('fs').createWriteStream(
             path.join(__dirname, '../../morgan.log'), 

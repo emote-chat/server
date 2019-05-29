@@ -12,7 +12,12 @@ def main():
     with open(filename, 'rb') as f:
         read_dict = pickle.load(f)
         for key, value in read_dict.items():
-            print(f'{key}: {value}')
+            # print(f'{key}: {value}')
+            count = 0
+            for tweet in value:
+                count = count + 1
+            print(f'{key}: {count}')
+
     f.close()
 
 

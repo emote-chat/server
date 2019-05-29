@@ -28,7 +28,7 @@ def main():
             for tweet in value:
                 count = count + 1
                 # Ensure the training data is the same number of entries so it's not biased
-                if (count < 4000):
+                if (count < 7200):
                     x.append(tweet)
                     y.append(key)
 

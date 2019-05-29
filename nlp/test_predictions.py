@@ -3,9 +3,13 @@ from sklearn.externals import joblib
 from pathlib import Path
 
 def main(message):
-    """File for testing predictions"""
-    modelFile = Path.cwd() / 'nlp/tweets_model.pkl'
-    vectFile = Path.cwd() / 'nlp/tweets_vectorizer.pkl'
+    """Files for testing predictions"""
+    if (Path('nlp/tweets_model.pkl')).is_file():
+        modelFile = 'nlp/tweets_model.pkl'
+        vectFile = 'nlp/tweets_vectorizer.pkl'
+    else:
+        modelFile = 'tweets_model.pkl'
+        vectFile = 'tweets_vectorizer.pkl'
 
     # Load stored model and vectorizer
     clf = joblib.load(modelFile)

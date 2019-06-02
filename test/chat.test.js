@@ -16,17 +16,17 @@ describe('Test Suite for chat', () => {
         server = await app.listen();
         db = require(path.join(__dirname, '../src/db/index'));
         await initSchema(db);
-        
+
         // sign up user to retrieve valid access token
         const { text } = await request(server)
             .post('/api/signup')
             .send(user);
-        
+
         // sign up another user
         const { text: otherUserText } = await request(server)
             .post('/api/signup')
             .send(anotherUser);
-        
+
         // use the access token for subsequent requests
         accessToken = JSON.parse(text).access_token;
 
@@ -236,10 +236,10 @@ describe('Test Suite for chat', () => {
                     text: 'hey',
                     created: expect.any(String),
                     reactions: [
-                    {
-                        users_id: expect.any(Number),
-                        emoji: expect.any(String)
-                    }]
+                        {
+                            users_id: expect.any(Number),
+                            emoji: expect.any(String)
+                        }]
                 })
             ])
         );
@@ -376,9 +376,9 @@ describe('Test Suite for chat', () => {
             .set('Authorization', `Bearer ${accessToken}`);
 
         expect(statusCode).toBe(200);
-        
+
         expect(JSON.parse(text)).toEqual({
-            chats_id: 1, 
+            chats_id: 1,
             users_id: 2
         });
 

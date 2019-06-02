@@ -1,7 +1,7 @@
 module.exports = (() => {
-	const express = require('express');
-	const router = express.Router();
-	const path = require('path');
+    const express = require('express');
+    const router = express.Router();
+    const path = require('path');
     const messageController = require(path.join(__dirname, '../controllers/message.controller'));
     // bring in middleware to verify user's membership in chat
     const membershipMiddleware = require(path.join(__dirname, '../middlewares/membership'));
@@ -54,9 +54,9 @@ module.exports = (() => {
     *          "message": "Given chat or message not found"
     *     }
     */
-	router.post('/:mid/reaction', messageController.addReaction);
+    router.post('/:mid/reaction', messageController.addReaction);
 
-	// ... and other possible routes like updating/removing message and removing reaction (tbd)
-	
-	return router;
+    // ... and other possible routes like updating/removing message and removing reaction (tbd)
+
+    return router;
 })();

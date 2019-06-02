@@ -20,17 +20,17 @@ describe('Test Suite for message', () => {
         server = await app.listen();
         db = require(path.join(__dirname, '../src/db/index'));
         await initSchema(db);
-        
+
         // sign up user to retrieve valid access token
         const { text } = await request(server)
             .post('/api/signup')
             .send(user);
-        
+
         // sign up another user
         const { text: otherUserText } = await request(server)
             .post('/api/signup')
             .send(anotherUser);
-        
+
         // use the access token and user data for subsequent requests
         accessToken = JSON.parse(text).access_token;
         userId = JSON.parse(text).user.id;

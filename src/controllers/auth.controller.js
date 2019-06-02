@@ -28,7 +28,7 @@ const authorize = async (password, hash) => {
         const isMatch = await bcrypt.compare(password, hash);
         return isMatch;
     }
-    catch(error) {
+    catch (error) {
         return Promise.reject({ message: 'Authorization failed' });
     }
 }
@@ -40,7 +40,7 @@ const createUser = async (user) => {
         // returning user id
         return await db.one(queries.createUser, user);
     }
-    catch(error) {
+    catch (error) {
         return Promise.reject({ message: 'Create user failed' });
     }
 }
@@ -48,11 +48,11 @@ const createUser = async (user) => {
 exports.createUser = createUser;
 
 exports.signup = async (req, res, next) => {
-    
+
     if (!req.body.display_name || !req.body.email || !req.body.password) {
         return next('Missing fields');
     }
-    
+
     try {
         const email = req.body.email.toLowerCase();
         const saltRounds = 12; // 2^12 iterations
@@ -80,16 +80,16 @@ exports.signup = async (req, res, next) => {
         // created; return user info, access token and expiration
         return res.status(201).json(authentication);
     }
-    catch(error) {
+    catch (error) {
         if (error) return next(error);
     }
 }
 
 exports.login = async (req, res, next) => {
     if (!req.body.email || !req.body.password) {
-	    return next('Missing fields');
+        return next('Missing fields');
     }
-    
+
     try {
         const email = req.body.email.toLowerCase();
         // verify that user with given email already exists
@@ -101,7 +101,7 @@ exports.login = async (req, res, next) => {
         // plaintext pw
         const userSentPassword = req.body.password;
         // user id, email and password in db
-        const { password, ...user} = users[0];
+        const { password, ...user } = users[0];
 
         // authorize user
         const authorization = await authorize(userSentPassword, password);
@@ -114,7 +114,7 @@ exports.login = async (req, res, next) => {
 
         return res.status(200).json(authentication);
     }
-    catch(error) {
+    catch (error) {
         if (error) return next(error);
     }
 };

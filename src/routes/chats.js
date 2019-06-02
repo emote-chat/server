@@ -107,7 +107,7 @@ module.exports = (() => {
 	*     }
 	*/
 	router.post('/', chatController.createChat);
-	
+
 	// must have some middleware to verify user making the API call is part of the given chat
 	router.use('/:cid*', membershipMiddleware);
 
@@ -178,7 +178,7 @@ module.exports = (() => {
 	*     }
 	*/
 	router.get('/:cid', chatController.getMessagesInChat);
-	
+
 	/**
 	* @api {post} /chat/:cid/message Create message in chat
 	* @apiName CreateMessageInChat
@@ -289,7 +289,7 @@ module.exports = (() => {
 	*     }
 	*/
 	router.post('/:cid/:uid', chatController.addUserToChat);
-	
+
 	/**
 	* @api {delete} /chat/:cid/:uid Delete user from chat
 	* @apiName DeleteUserFromChat

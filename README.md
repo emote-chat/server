@@ -62,22 +62,23 @@ python nlp/twitter.py
 python nlp/twitter.py -se
 ```
 
-## Read Tweets Pickle
+### Read Tweets Pickle
 ```sh
 python nlp/read.py
 ```
 
-## Train Model Using Tweets Data
+### Train Model Using Tweets Data
 ```sh
 python nlp/train.py
 ```
 
-## Test Model
+### Test Model
 ```sh
-python nlp/test_predictions.py --message 'message to test'
+python nlp/test_predictions.py 'message to test'
 ```
+Current model pred_proba order: 😂, 😍, 😞, 😮
 
-## Start Flask App for Emoji Prediction Endpoint
+### Start Flask App for Emoji Prediction Endpoint
 ```sh
 export FLASK_APP=nlp/app.py
 python -m flask run

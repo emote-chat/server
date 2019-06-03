@@ -128,6 +128,9 @@ module.exports = (() => {
 	* @apiSuccess {Object} -.reactions.- Emoji reaction.
 	* @apiSuccess {Number} -.reactions.-.users_id User id.
 	* @apiSuccess {String} -.reactions.-.emoji User emoji reaction.
+	* @apiSuccess {Object[]} -.recommended List of recommended emoji reactions.
+	* @apiSuccess {Object} -.recommended.- Emoji reaction.
+	* @apiSuccess {String} -.recommended.-.emoji Recommended emoji.
 	*
 	* @apiSuccessExample Success Response:
 	*     HTTP/1.1 200 OK
@@ -142,7 +145,12 @@ module.exports = (() => {
 	*                         "users_id": 2,
 	*                         "emoji": "😀"
 	*                    }
-	*               ]
+	*               ],
+	*               "recommended": [
+	*                    {
+	*                         "emoji": "😀"
+	*                    }
+	*               ],
 	*          },
 	*          {
 	*               "id": 2,

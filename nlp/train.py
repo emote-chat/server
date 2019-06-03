@@ -6,18 +6,19 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 from sklearn.externals import joblib
 
+
 def main():
     """Train model using tweet data"""
     if (Path('nlp/tweets')).is_file():
-        filename = 'nlp/tweets'
+        path = 'nlp/'
     else:
-        filename = 'tweets'
+        path = ''
 
-    with open(filename, 'rb') as f:
+    with open(f'{path}tweets', 'rb') as f:
         tweets = pickle.load(f)
 
-        x = [] # data (tweets)
-        y = [] # category (emojis)
+        x = []  # data (tweets)
+        y = []  # category (emojis)
 
         # Prep data
         for key, value in tweets.items():
@@ -27,7 +28,8 @@ def main():
 
             for tweet in value:
                 count = count + 1
-                # Ensure the training data is the same number of entries so it's not biased
+                # Ensure the training data is the same number of entries so
+                # it's not biased
                 if (count < 7200):
                     x.append(tweet)
                     y.append(key)
@@ -40,7 +42,8 @@ def main():
         x = txt_transformed.toarray()
 
         # Split into training and testing data
-        X_train, X_test, y_train, y_test = train_test_split(x, y, test_size= 0.2, random_state=13)
+        X_train, X_test, y_train, y_test = train_test_split(
+            x, y, test_size=0.2, random_state=13)
 
         # Create classifier and fit data
         clf = MultinomialNB()
@@ -52,8 +55,8 @@ def main():
         print(classification_report(y_test, y_pred))
 
         # Save model and vectorizer
-        joblib.dump(clf, 'tweets_model.pkl')
-        joblib.dump(tf, 'tweets_vectorizer.pkl')
+        joblib.dump(clf, f'{path}tweets_model.pkl')
+        joblib.dump(tf, f'{path}tweets_vectorizer.pkl')
 
     f.close()
 

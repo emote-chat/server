@@ -76,13 +76,22 @@ module.exports = {
                         'users_id', ume.users_id,
                         'emoji', ume.emoji
                     )
-                ) FILTER (WHERE emoji IS NOT NULL), '[]'
-            ) AS reactions
+                ) FILTER (WHERE ume.emoji IS NOT NULL), '[]'
+            ) AS reactions,
+            COALESCE(
+                json_agg(
+                    json_build_object(
+                        'emoji', rem.emoji
+                    )
+                ) FILTER (WHERE rem.emoji IS NOT NULL), '[]'
+            ) AS recommended
         FROM messages AS m
         LEFT JOIN users_messages_emojis AS ume ON ume.messages_id=m.id
+        LEFT JOIN recommended_emojis_messages AS rem ON rem.messages_id=m.id
         WHERE chats_id = $1
         GROUP BY m.id`
     ),
+    createRecommendedEmoji: new PS('create-recommended-emoji', 'INSERT INTO recommended_emojis_messages(messages_id, emoji) VALUES($1, $2)'),
     // users_emojis_reactions
     addReaction: new PS('add-reaction', 'INSERT INTO users_messages_emojis(messages_id, users_id, emoji) VALUES($1, $2, $3) RETURNING *'),
 }

@@ -26,7 +26,6 @@ def main():
         data.append(message)
         prediction = clf.predict(tf.transform(data))
         pred_proba = clf.predict_proba(tf.transform(data))
-        print(pred_proba)
 
         # Only return data if within certain confidence threshold
         emojis = clf.classes_
@@ -37,9 +36,6 @@ def main():
             prob = probability_arr[idx]
             if (prob > threshold):
                 results[emoji] = prob
-
-        print(results)
-        print(jsonify(emoji=results))
         return jsonify(emoji=results)
 
 if __name__ == '__main__':

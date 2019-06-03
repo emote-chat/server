@@ -12,10 +12,10 @@ const addUser = async (userId, chatId) => {
         // add user id and chat id to users_chats
         return await db.one(queries.addUserToChat, [userId, chatId]);
     }
-    catch(error) {
+    catch (error) {
         // check if primary key constraint violated
         // return error str indicating that or return error itself
-        return error.constraint === 'users_chats_pkey' ? 
+        return error.constraint === 'users_chats_pkey' ?
             Promise.reject('User already member of chat') :
             Promise.reject(error);
     }
@@ -26,10 +26,10 @@ exports.createChat = async (req, res, next) => {
         if (!req.body.name) {
             return next('Missing fields');
         }
-        
+
         // create chat; return id
         const { id: chatId } = await db.one(queries.createChat, [req.body.name]);
-        
+
         // get user id from auth headers
         const { id: userId } = getPayload(req.headers);
         // add user id (of user making req) and chat id to users_chats table
@@ -41,7 +41,7 @@ exports.createChat = async (req, res, next) => {
         // created chat; return chat id, name and users arr  
         return res.status(201).json(chat);
     }
-    catch(error) {
+    catch (error) {
         if (error) return next(error);
     }
 }
@@ -93,9 +93,9 @@ exports.createMessage = async (req, res, next) => {
         );
 
         // success; return new message
-        return res.status(201).json({...insertedMessage, reactions: []});
+        return res.status(201).json({ ...insertedMessage, reactions: [] });
     }
-    catch(error) {
+    catch (error) {
         console.log(error);
         if (error) return next(error);
     }
@@ -113,7 +113,7 @@ exports.getUserChats = async (req, res, next) => {
         // success; return user's chats
         return res.status(200).json(chats);
     }
-    catch(error) {
+    catch (error) {
         if (error) return next(error);
     }
 }
@@ -126,7 +126,7 @@ exports.getMessagesInChat = async (req, res, next) => {
         // success; return array of messages
         return res.status(200).json(messages);
     }
-    catch(error) {
+    catch (error) {
         if (error) return next(error);
     }
 }
@@ -140,7 +140,7 @@ exports.addUserToChat = async (req, res, next) => {
         // success; return nothing
         return res.status(201).json(user);
     }
-    catch(error) {
+    catch (error) {
         if (error) return next(error);
     }
 }
@@ -153,7 +153,7 @@ exports.deleteUserFromChat = async (req, res, next) => {
         // success; return nothing
         return res.status(200).json(deletedUser);
     }
-    catch(error) {
+    catch (error) {
         if (error) return next(error);
     }
 }

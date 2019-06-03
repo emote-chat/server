@@ -38,7 +38,7 @@ exports.addReaction = async (req, res, next) => {
         // success; return inserted emoji info
         return res.status(201).json(insertedEmoji);
     }
-    catch(error) {
+    catch (error) {
         if (error) return next(error);
     }
 }

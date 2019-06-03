@@ -4,8 +4,8 @@ const app = require(path.join(__dirname, 'config/app'));
 
 const server = app.listen(app.get('port'), () => {
     const isModeProduction = app.get('mode') === 'production';
-    process.stdout.write(`Express started on ${isModeProduction ? 
-        'http://emote.ml' : 
+    process.stdout.write(`Express started on ${isModeProduction ?
+        'http://emote.ml' :
         `http://localhost:${app.get('port')}; `}`
     );
     process.stdout.write(`${isModeProduction ? '' : 'press Ctrl-C to terminate'}\n`);
@@ -19,7 +19,11 @@ io.on('connection', (socket) => {
     socket.on('joinChat', cid => {
         socket.join(cid);
     });
-    
+
+    socket.on('leaveChat', cid => {
+        socket.leave(cid);
+    });
+
     socket.on('createMessage', data => {
         socket.broadcast.to(data.chats_id).emit('receiveMessage', data);
     });

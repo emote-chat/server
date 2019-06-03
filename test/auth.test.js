@@ -5,10 +5,10 @@ const { user, invalidUser } = require(path.join(__dirname, 'helpers/db'));
 const { initSchema } = require(path.join(__dirname, '../src/db/migrations/seed'));
 
 describe('Test Suite for auth', () => {
-    
+
     let server = null;
     let db = null;
-    
+
     beforeAll(async (done) => {
         server = await app.listen();
         db = require(path.join(__dirname, '../src/db/index'));
@@ -48,10 +48,10 @@ describe('Test Suite for auth', () => {
             access_token: expect.any(String),
             expires_in: expect.any(String)
         });
-        
+
         done();
     });
-    
+
     test('POST /api/signup with same email of existing user should respond with 400', async (done) => {
         const res = await request(server).post('/api/signup').send(user);
         // expect error since can only have one account per email
@@ -68,14 +68,14 @@ describe('Test Suite for auth', () => {
     });
 
     test('POST /api/login should respond with 200 (case-insensitive)', async (done) => {
-        const {display_name, ...testUser} = user;        
+        const { display_name, ...testUser } = user;
         // convert email prop val to uppercase; ensure case-insensitive
         testUser.email = testUser.email.toUpperCase();
 
         const res = await request(server).post('/api/login').send(testUser);
 
         // expect success
-	    expect(res.statusCode).toBe(200);
+        expect(res.statusCode).toBe(200);
 
         // verify response data is correct
         expect(JSON.parse(res.text)).toEqual({
@@ -89,10 +89,10 @@ describe('Test Suite for auth', () => {
             access_token: expect.any(String),
             expires_in: expect.any(String)
         });
-        
+
         done();
     });
-    
+
     test('POST /api/login with invalid email should respond with 401', async (done) => {
         const res = await request(server).post('/api/login').send({
             email: invalidUser.email,
@@ -108,7 +108,7 @@ describe('Test Suite for auth', () => {
             email: user.email,
             password: invalidUser.password
         });
-	
+
         // expect error since password is incorrect
         expect(res.statusCode).toBe(401);
         done();

@@ -47,10 +47,16 @@ npm test
 
 1. Don't forget to define `TWITTER_USER`, `TWITTER_PASS`, `TWITTER_KEY` and `TWITTER_SECRET` in your `.env` file. *Refer to the `.env.example` to be sure you define the necessary environment variables.*
 1. If planning to get more data using a twitter stream, download [this ChromeDriver zip file](https://chromedriver.storage.googleapis.com/index.html?path=74.0.3729.6/), unzip it and copy the executable into the `nlp` directory.
-1. Update and activate the Anaconda virtual env:
+1. Create the virtual env after updating the dependencies to the latest compatible versions (NOTE: we have separate _env.yml files for MacOS and Linux OS - the latter of which works with Ubuntu):
+```sh
+# update dependencies specified in the yml to latest compatible versions
+conda env update -f nlp/REPLACE_WITH_YOUR_OS_ENV.yml --prune
+# create conda virtual environment named emote from yml
+conda env create -f nlp/REPLACE_WITH_YOUR_OS_ENV.yml
+```
+1. Activate the Anaconda virtual env:
 
 ```sh
-conda env update -f nlp/env.yml --prune
 conda activate emote
 ```
 
